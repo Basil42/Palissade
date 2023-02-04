@@ -6,9 +6,9 @@ public class Level : ScriptableObject
 {
     private Node[,] _nodes = null; public Node[,] Nodes => _nodes;
 
-    private int _width = 3; public int Width => _width;
+    [SerializeField] int _width = 3; public int Width => _width;
 
-    private int _height = 3; public int Height => _height;
+    [SerializeField] int _height = 3; public int Height => _height;
 
     public Node this[int x, int y] => _nodes[x,y];
 

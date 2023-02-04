@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -21,6 +22,8 @@ public class LevelRenderer : MonoBehaviour
     /// <summary>
     /// Create the level if needed, and return it
     /// </summary>
+    
+    [Obsolete("if Levels need to be created at runtime use ScriptableObject.CreateInstance() instead of the new keyword",false)]
     public Level Level
     {
         get
@@ -40,12 +43,12 @@ public class LevelRenderer : MonoBehaviour
         //Capte la position de la souris
         Vector3 mousePosition = Input.mousePosition;
 
-        // Rayon de la souris par rapport à la caméra
+        // Rayon de la souris par rapport ï¿½ la camï¿½ra
         Ray ray = currentCamera.ScreenPointToRay(mousePosition);
-        // Création d'une variable Raycast nécessaire pour le out de la fonction Raycast
+        // Crï¿½ation d'une variable Raycast nï¿½cessaire pour le out de la fonction Raycast
         RaycastHit hit;
 
-        //Si le raycast de la souris sur l'écran est en contact avec un objet de layer "Structure"
+        //Si le raycast de la souris sur l'ï¿½cran est en contact avec un objet de layer "Structure"
         if (Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("Tile")))
         {
             Debug.DrawRay(ray.origin, ray.direction * 100, Color.green);
@@ -63,6 +66,7 @@ public class LevelRenderer : MonoBehaviour
         return _level[(int)x, (int)z];
     }
 
+    [Obsolete("You can now generate a level using the asset creation right click menu, this should not be used anymore",false)]
     public void GenerateLevel()
     {
         DestroyAllChilds();
@@ -77,7 +81,7 @@ public class LevelRenderer : MonoBehaviour
                 GameObject tile = Instantiate(_tilePrefab.gameObject, transform.position + new Vector3(x, 0 ,y), Quaternion.identity, transform);
                 tile.name = $"Case [{x}.{y}]";
 
-                // On colorie la tile selon l'état du node
+                // On colorie la tile selon l'ï¿½tat du node
                 // NE FONCTIONNE PAS AVEC LE MODE EDITION : SHARED MATERIAL ECRASE LA COULEUR DU MATERIAL DONC TOUT EST
                 // DE LA COULEUR DE LA DERNIERE TILE
                 switch (_level[x, y].StateNode)
@@ -114,7 +118,7 @@ public class LevelRenderer : MonoBehaviour
     
     private void OnDrawGizmos()
     {
-        // Si on est en EditModes && la taille à changé, on recrée le level
+        // Si on est en EditModes && la taille ï¿½ changï¿½, on recrï¿½e le level
         if(!Application.isPlaying && (_widht != Level.Width || _height != Level.Height))
         {
             _level = null;
