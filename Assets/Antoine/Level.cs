@@ -17,7 +17,12 @@ public class Level : ScriptableObject
         _width = widht;
         _height = height;
 
-        _nodes = new Node[_width , _height];
+        initializeLevel();
+    }
+
+    internal void initializeLevel()
+    {
+        _nodes = new Node[_width, _height];
         for (int y = 0; y < _height; y++)
         {
             for (int x = 0; x < _width; x++)
