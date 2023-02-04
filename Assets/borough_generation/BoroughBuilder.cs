@@ -54,8 +54,8 @@ namespace borough_generation
             //is the tile already a borough, a twoer or water?
             if (tile.StateNode == EnumStateNode.building || tile.StateNode == EnumStateNode.tower || tile.StateNode == EnumStateNode.water) return false;
             //is the tile under a player/opponent control
-            if (tile.StateNode == EnumStateNode.playerControlled ||
-                tile.StateNode == EnumStateNode.ennemyControlled) return true;
+            if (tile.NodeController == EnumNodeControl.playerControlled ||
+                tile.NodeController == EnumNodeControl.ennemyControlled) return true;
             return false;//default case, a tile not controlled by anyone.
             //TODO: account for city growth
         }

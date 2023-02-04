@@ -10,6 +10,9 @@ public class Level : ScriptableObject
 
     [SerializeField] int _height = 3; public int Height => _height;
 
+    [SerializeField] private float _tileSize = 10f;
+    public float TileSize => _tileSize;
+
     public Node this[int x, int y] => _nodes[x,y];
 
     public Level(int widht, int height)

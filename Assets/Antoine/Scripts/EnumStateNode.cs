@@ -8,6 +8,13 @@ public enum EnumStateNode
     buildable,
     building,
     tower,
+    wall,
+    castle
+}
+
+public enum EnumNodeControl
+{
+    none,
     playerControlled,
     ennemyControlled
 }
