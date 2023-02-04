@@ -6,5 +6,8 @@ public enum EnumStateNode
 {
     water,
     buildable,
-    building
+    building,
+    tower,
+    playerControlled,
+    ennemyControlled
 }

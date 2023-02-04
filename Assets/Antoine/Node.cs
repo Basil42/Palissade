@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// alias Cells, Units... bref un emplacement sur la grille
@@ -11,10 +12,10 @@ public class Node
     /// <summary>
     /// Postition du Node dans la grille
     /// </summary>
-    private Coords _coords = Coords.Zero; public Coords Coord => _coords;
+    private Vector2Int _coords = Vector2Int.zero; public Vector2Int Coord => _coords;
 
     /// <summary>
-    /// Definis l'état du node
+    /// Definis l'Ã©tat du node
     /// </summary>
     private EnumStateNode _stateNode = EnumStateNode.buildable;
 
@@ -27,7 +28,7 @@ public class Node
     /// </summary>
     public Node(int x, int y)
     {
-        _coords = new Coords(x, y);
+        _coords = new Vector2Int(x, y);
     }
 
     #endregion
@@ -35,7 +36,7 @@ public class Node
     #region Public API
 
     /// <inheritdoc cref="_coords"/>
-    public Coords Position => _coords;
+    public Vector2Int Position => _coords;
 
     /// <inheritdoc cref="_nodeState_crossable"/>
     public EnumStateNode StateNode { get { return _stateNode; } set { _stateNode = value; } }
