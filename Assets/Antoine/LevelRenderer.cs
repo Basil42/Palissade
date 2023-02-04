@@ -18,11 +18,14 @@ public class LevelRenderer : MonoBehaviour
     [SerializeField]
     private GameObject _tilePrefab = null;
 
-    private Level _level = null;
+    [SerializeField]
+    private float _sizeModifier = 1;
+
+    [SerializeField]
+    private Level _level;
     /// <summary>
     /// Create the level if needed, and return it
     /// </summary>
-    
     [Obsolete("if Levels need to be created at runtime use ScriptableObject.CreateInstance() instead of the new keyword",false)]
     public Level Level
     {
@@ -78,7 +81,7 @@ public class LevelRenderer : MonoBehaviour
         {
             for (int x = 0; x < _widht; x++)
             {
-                GameObject tile = Instantiate(_tilePrefab.gameObject, transform.position + new Vector3(x, 0 ,y), Quaternion.identity, transform);
+                GameObject tile = Instantiate(_tilePrefab.gameObject, transform.position + new Vector3(x*_sizeModifier, 0 ,y*_sizeModifier), Quaternion.identity, transform);
                 tile.name = $"Case [{x}.{y}]";
 
                 // On colorie la tile selon l'�tat du node
