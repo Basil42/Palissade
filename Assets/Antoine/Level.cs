@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[CreateAssetMenu()]
 public class Level : ScriptableObject
 {
     private Node[,] _nodes = null; public Node[,] Nodes => _nodes;
