@@ -38,18 +38,23 @@ public class TowerBasic : MonoBehaviour
         // Vector3.Distance(transform.position, obj.transform.position)
     }
 
-    
+    public void ManageDeadEnemy(){
+        for (int i = 0; i < mEnemies.Count; i++)
+        {
+            if(mEnemies[i].isDead()){
+                Debug.Log(mEnemies[i].gameObject.name + " is dead");
+                Destroy(mEnemies[i].gameObject);
+                mEnemies.Remove(mEnemies[i]);
+
+            }
+            
+        }
+    }
 
     // Update is called once per frame
     void Update()
     {
-        foreach (EnemyBehaviour enemy in mEnemies)
-        {
-            if(enemy.isDead()){
-                mEnemies.Remove(enemy);
-                // Debug.Log
-            }
-        }
+
 
     }
 }

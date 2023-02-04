@@ -30,7 +30,7 @@ public class TowerAI : TowerBasic
     }
 
     void projectileLauncher(EnemyBehaviour enemy){
-        
+
     }
     // Start is called before the first frame update
     void Start()
@@ -41,6 +41,7 @@ public class TowerAI : TowerBasic
     // Update is called once per frame
     void Update()
     {
+        ManageDeadEnemy();
         if (mEnemies.Count != 0){
             if (mCurrentTime < 0){
                 Shoot();

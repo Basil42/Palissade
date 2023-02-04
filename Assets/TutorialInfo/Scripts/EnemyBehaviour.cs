@@ -12,7 +12,7 @@ public class EnemyBehaviour : MonoBehaviour
     }
 
     public bool isDead(){
-        return mLife <= 0;
+        return mLife <= 0.0;
     }
 
     void Show(){
