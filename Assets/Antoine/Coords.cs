@@ -1,7 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
-[System.Serializable]
+[System.Serializable][Obsolete]
 public struct Coords
 {
     public static Coords Zero => new Coords(0, 0);
