@@ -52,7 +52,7 @@ public class LevelRenderer : MonoBehaviour
         RaycastHit hit;
 
         //Si le raycast de la souris sur l'�cran est en contact avec un objet de layer "Structure"
-        if (Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("Tile")))
+        if (Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("3DTile"))) // <- ou layer 6 normalement
         {
             Debug.DrawRay(ray.origin, ray.direction * 100, Color.green);
 
