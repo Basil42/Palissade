@@ -19,6 +19,7 @@ public class Node
     /// </summary>
     private EnumStateNode _stateNode = EnumStateNode.buildable;
 
+    private EnumNodeControl _nodeControl = EnumNodeControl.none;
     #endregion
 
     #region Initialisation
@@ -40,6 +41,10 @@ public class Node
 
     /// <inheritdoc cref="_nodeState_crossable"/>
     public EnumStateNode StateNode { get { return _stateNode; } set { _stateNode = value; } }
-
+    public EnumNodeControl NodeController
+    {
+        get { return _nodeControl; }
+        set { _nodeControl = value; }
+    }
     #endregion
 }
