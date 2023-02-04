@@ -5,6 +5,8 @@ using UnityEngine;
 public class EnemyBehaviour : MonoBehaviour
 {
     public int mLife;
+    public float mSpeed;
+    public Vector3 mDestination; 
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +24,7 @@ public class EnemyBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        transform.Translate(Vector3.forward*mSpeed * Time.deltaTime);
         // if (isDead())
         // {
             

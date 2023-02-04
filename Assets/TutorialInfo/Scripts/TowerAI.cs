@@ -7,7 +7,7 @@ public class TowerAI : TowerBasic
 
     public float mRayShoot;
     public float mSpeedShoot;
-    [SerializeField] float mCurrentTime;
+    public float mCurrentTime;
 
     // public TowerAI(){
     //     mRayShoot = 10;
@@ -20,11 +20,16 @@ public class TowerAI : TowerBasic
         if (mEnemies.Count != 0)
         {
             SortEnemy();
-
-            //lance un projectil vers la direction de l'enemie
-            Debug.Log("Je tire sur "+ mEnemies[0].gameObject.name+" "+ mEnemies[0].gameObject.transform.position);
+            Vector3 m = transform.position;
+            m += Vector3.up * 4.0f;
+            ProjectileBehaviour ball = Instantiate(mProjectile, m,  transform.rotation );
+            ball.mEnemy = mEnemies[0];
+            // ball.gameObject.GetComponent<Rigidbody>().velocity = (Vector3.up + Vector3.forward) * ball.mSpeed;
+            // ball.gameObject.transform.position = transform.TranformPoint(Vector3.forward * 1.5f);
+            // ball.gameObject.GetComponent<Rigidbody>().AddRelativeForce(new Vector3 (0, ball.mSpeed,0));
+            // ball.gameObject.transform.rotation = Quaternion.LookRotation(mEnemies[0].gameObject.transform.position - transform.position, Vector3.up);
+            // ball.mDestination = mEnemies[0].gameObject.transform.position;
             Damage(mEnemies[0]);
-            Debug.Log(mEnemies[0].gameObject.name + " life : "+ mEnemies[0].mLife);
         }
 
     }

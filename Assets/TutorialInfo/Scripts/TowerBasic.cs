@@ -9,7 +9,7 @@ public class TowerBasic : MonoBehaviour
     // public List<GameObject> mEnemies;
     public int mLife;
 
-    public GameObject projectil; 
+    public ProjectileBehaviour mProjectile; 
 
     void Shoot(){
         // cherche un enemis et lui tire dessus
