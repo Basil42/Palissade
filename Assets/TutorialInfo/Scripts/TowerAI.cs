@@ -9,12 +9,6 @@ public class TowerAI : TowerBasic
     public float mSpeedShoot;
     public float mCurrentTime;
 
-    // public TowerAI(){
-    //     mRayShoot = 10;
-    //     mSpeed = 5;
-    // }
-
-
 
     void Shoot(){
         if (mEnemies.Count != 0)
@@ -24,19 +18,10 @@ public class TowerAI : TowerBasic
             m += Vector3.up * 2.0f;
             ProjectileBehaviour ball = Instantiate(mProjectile, m,  transform.rotation );
             ball.mEnemy = mEnemies[0];
-            // ball.gameObject.GetComponent<Rigidbody>().velocity = (Vector3.up + Vector3.forward) * ball.mSpeed;
-            // ball.gameObject.transform.position = transform.TranformPoint(Vector3.forward * 1.5f);
-            // ball.gameObject.GetComponent<Rigidbody>().AddRelativeForce(new Vector3 (0, ball.mSpeed,0));
-            // ball.gameObject.transform.rotation = Quaternion.LookRotation(mEnemies[0].gameObject.transform.position - transform.position, Vector3.up);
-            // ball.mDestination = mEnemies[0].gameObject.transform.position;
-            // Damage(mEnemies[0]);
         }
 
     }
 
-    void projectileLauncher(EnemyBehaviour enemy){
-
-    }
     // Start is called before the first frame update
     void Start()
     {
