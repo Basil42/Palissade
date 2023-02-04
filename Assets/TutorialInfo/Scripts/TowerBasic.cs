@@ -43,7 +43,13 @@ public class TowerBasic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        foreach (EnemyBehaviour enemy in mEnemies)
+        {
+            if(enemy.isDead()){
+                mEnemies.Remove(enemy);
+                // Debug.Log
+            }
+        }
 
     }
 }

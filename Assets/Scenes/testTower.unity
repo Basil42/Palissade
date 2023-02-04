@@ -297,9 +297,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mEnemies:
   - {fileID: 1812923360}
-  - {fileID: 123853104}
+  - {fileID: 0}
   mLife: 10
   projectil: {fileID: 1188552206}
+  mRayShoot: 0
+  mSpeedShoot: 0
+  mCurrentTime: 0
 --- !u!4 &285749985
 Transform:
   m_ObjectHideFlags: 0
@@ -950,9 +953,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mEnemies:
   - {fileID: 1812923360}
-  - {fileID: 123853104}
+  - {fileID: 0}
   mLife: 10
   projectil: {fileID: 1188552206}
+  mRayShoot: 10
+  mSpeedShoot: 5
+  mCurrentTime: 10
 --- !u!4 &1903242187
 Transform:
   m_ObjectHideFlags: 0

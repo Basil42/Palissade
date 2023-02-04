@@ -11,7 +11,7 @@ public class EnemyBehaviour : MonoBehaviour
         
     }
 
-    bool isDead(){
+    public bool isDead(){
         return mLife <= 0;
     }
 
@@ -20,11 +20,11 @@ public class EnemyBehaviour : MonoBehaviour
     }
 
     // Update is called once per frame
-    // void Update()
-    // {
-    //     if (isDead())
-    //     {
+    void Update()
+    {
+        // if (isDead())
+        // {
             
-    //     }
-    // }
+        // }
+    }
 }
