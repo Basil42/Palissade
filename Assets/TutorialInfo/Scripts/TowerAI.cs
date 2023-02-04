@@ -29,7 +29,7 @@ public class TowerAI : TowerBasic
             // ball.gameObject.GetComponent<Rigidbody>().AddRelativeForce(new Vector3 (0, ball.mSpeed,0));
             // ball.gameObject.transform.rotation = Quaternion.LookRotation(mEnemies[0].gameObject.transform.position - transform.position, Vector3.up);
             // ball.mDestination = mEnemies[0].gameObject.transform.position;
-            Damage(mEnemies[0]);
+            // Damage(mEnemies[0]);
         }
 
     }

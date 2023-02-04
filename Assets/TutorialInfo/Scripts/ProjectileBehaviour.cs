@@ -46,19 +46,23 @@ public class ProjectileBehaviour : MonoBehaviour
         if (mDeltaTime < mTime)
         {
             // float lerpFactor = Vector3.Distance(mEnemyInitPos,mEnemy.transform.position) / Vector3.Distance(mEnemyInitPos,mDestPos);
-            float lerpFactor = Vector3.Distance(mInitPos ,transform.position) / Vector3.Distance(mInitPos,mEnemyInitPos);
+            // float lerpFactor = Vector3.Distance(mInitPos ,transform.position) / Vector3.Distance(mInitPos,mEnemyInitPos);
+            float lerpFactor = mDeltaTime/mTime; 
             float height = 2;
-            // Vector3 pos = Vector3.Lerp(mInitPos, mDestPos, mAnimationCurve.Evaluate(lerpFactor));//
+            //Vector3 pos = Vector3.Lerp(mInitPos, mDestPos, mAnimationCurve.Evaluate(lerpFactor));//
 
-            Vector3 pos = Vector3.Lerp(mInitPos, mEnemy.transform.position, mAnimationCurve.Evaluate(lerpFactor));// 
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(mEnemy.transform.position - transform.position), mSpeed * Time.deltaTime);
+            Vector3 pos = Vector3.Lerp(mInitPos, mEnemy.transform.position, lerpFactor);// 
+
+            // transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(mEnemy.transform.position - transform.position), mSpeed * Time.deltaTime);
+
             // Debug.Log("lerpFactor "+lerpFactor + " pos "+ pos + "Norm = " + Vector3.Normalize(mEnemy.transform.position - transform.position));
             // transform.position = Vector3.Normalize(mDestPos-mInitPos)*mSpeed*mDeltaTime+mInitPos +new Vector3(0, lerpFactor*height,0);
             // transform.position = Vector3.Normalize(mEnemy.transform.position - transform.position) * mSpeed * mDeltaTime + mInitPos;// +new Vector3(0, lerpFactor,0);
-            
-            
-            transform.position += transform.forward * Time.deltaTime * mSpeed;
-            // transform.position.y = lerpFactor;
+
+            transform.position = pos;
+            // transform.position += transform.forward * Time.deltaTime * mSpeed;
+            /*transform.position.y += lerpFactor;*/
+            transform.position = new Vector3(transform.position.x, mAnimationCurve.Evaluate(lerpFactor)*4, transform.position.z);
             // transform.position += Vector3.Normalize(mEnemy.transform.position - transform.position) * mSpeed;// +new Vector3(0, lerpFactor,0);
 
             mDeltaTime += Time.deltaTime;   
@@ -68,14 +72,6 @@ public class ProjectileBehaviour : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        // if (m_ObjectCollider.isTrigger)
-        // {
-        //     Destroy(this);
-        // }
-        // }else
-        // {
-        //     Destroy();
-        // }
         
     }
 }
