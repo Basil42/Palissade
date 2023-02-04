@@ -416,6 +416,7 @@ GameObject:
   - component: {fileID: 1134323620}
   - component: {fileID: 1134323619}
   - component: {fileID: 1134323618}
+  - component: {fileID: 1134323621}
   m_Layer: 0
   m_Name: Terrain
   m_TagString: Untagged
@@ -483,3 +484,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1134323621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1134323617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 962f3b8766a31cd46938b5bac1b7fc96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gridRef:
+    rid: -2
+  terrainRef: {fileID: 1134323619}
+  boroughPrefabs:
+  - {fileID: 7412134259254103931, guid: c3ee380e18c0c034b842e268bdcecbb8, type: 3}
+  maxTerrainHeight: 10
+  debug: 1
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
