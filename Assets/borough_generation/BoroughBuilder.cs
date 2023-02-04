@@ -17,7 +17,7 @@ namespace borough_generation
 
         [Header("Debug")] [SerializeField] private bool debug;
 
-        private void Awake()
+        private void Start()
         {
             if (debug)
             {
@@ -41,7 +41,7 @@ namespace borough_generation
             var randomPrefabIndex = Random.Range(0, boroughPrefabs.Count-1);
             var tileCoord = tile.Position;
             BoroughBehavior newBorough = Instantiate(boroughPrefabs[randomPrefabIndex],
-                new Vector3(tileCoord.x, tileCoord.y, maxTerrainHeight), 
+                new Vector3(tileCoord.x, maxTerrainHeight, tileCoord.y), 
                 Quaternion.identity);
             newBorough.Tile = tile;
         }
