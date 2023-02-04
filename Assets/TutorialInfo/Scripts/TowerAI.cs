@@ -21,7 +21,7 @@ public class TowerAI : TowerBasic
         {
             SortEnemy();
             Vector3 m = transform.position;
-            m += Vector3.up * 4.0f;
+            m += Vector3.up * 2.0f;
             ProjectileBehaviour ball = Instantiate(mProjectile, m,  transform.rotation );
             ball.mEnemy = mEnemies[0];
             // ball.gameObject.GetComponent<Rigidbody>().velocity = (Vector3.up + Vector3.forward) * ball.mSpeed;

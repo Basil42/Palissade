@@ -21,7 +21,7 @@ public class ProjectileBehaviour : MonoBehaviour
     {
         m_ObjectCollider = GetComponent<Collider>();
         //Here the GameObject's Collider is not a trigger
-        m_ObjectCollider.isTrigger = false;
+        // m_ObjectCollider.isTrigger = false;
         mDeltaTime = 0;
         mInitPos = gameObject.transform.position;
         mEnemyInitPos = mEnemy.transform.position;
@@ -32,7 +32,8 @@ public class ProjectileBehaviour : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other){
-        other.GetComponent<EnemyBehaviour>().mLife -= 1;
+
+        other.GetComponentInParent<EnemyBehaviour>().mLife -= 1;
         Destroy(gameObject);
     }
 
@@ -45,16 +46,27 @@ public class ProjectileBehaviour : MonoBehaviour
         if (mDeltaTime < mTime)
         {
             // float lerpFactor = Vector3.Distance(mEnemyInitPos,mEnemy.transform.position) / Vector3.Distance(mEnemyInitPos,mDestPos);
-            float lerpFactor = Vector3.Distance(transform.position,mDestPos) / Vector3.Distance(mEnemyInitPos,mDestPos);
+            float lerpFactor = Vector3.Distance(mInitPos ,transform.position) / Vector3.Distance(mInitPos,mEnemyInitPos);
             float height = 2;
-            Vector3 pos = Vector3.Lerp(mInitPos, mDestPos, mAnimationCurve.Evaluate(lerpFactor));// 
-            Debug.Log("lerpFactor "+lerpFactor+"pos "+ pos);
+            // Vector3 pos = Vector3.Lerp(mInitPos, mDestPos, mAnimationCurve.Evaluate(lerpFactor));//
+
+            Vector3 pos = Vector3.Lerp(mInitPos, mEnemy.transform.position, mAnimationCurve.Evaluate(lerpFactor));// 
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(mEnemy.transform.position - transform.position), mSpeed * Time.deltaTime);
+            // Debug.Log("lerpFactor "+lerpFactor + " pos "+ pos + "Norm = " + Vector3.Normalize(mEnemy.transform.position - transform.position));
             // transform.position = Vector3.Normalize(mDestPos-mInitPos)*mSpeed*mDeltaTime+mInitPos +new Vector3(0, lerpFactor*height,0);
-            transform.position = Vector3.Normalize(mEnemy.transform.position - transform.position)*mSpeed*mDeltaTime+mInitPos +new Vector3(0, lerpFactor*height,0);
+            // transform.position = Vector3.Normalize(mEnemy.transform.position - transform.position) * mSpeed * mDeltaTime + mInitPos;// +new Vector3(0, lerpFactor,0);
+            
+            
+            transform.position += transform.forward * Time.deltaTime * mSpeed;
+            // transform.position.y = lerpFactor;
+            // transform.position += Vector3.Normalize(mEnemy.transform.position - transform.position) * mSpeed;// +new Vector3(0, lerpFactor,0);
 
             mDeltaTime += Time.deltaTime;   
 
 
+        }else
+        {
+            Destroy(gameObject);
         }
         // if (m_ObjectCollider.isTrigger)
         // {
