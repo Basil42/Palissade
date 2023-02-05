@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public enum WallpieceType
@@ -62,6 +64,8 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
     private Queue<WallPiece> PieceQueue = new();//most likely only 2  pieces long at most
     private WallPiece heldPiece;//piece that the player is currently placing
     public int piecesPerRound = 15;
+    [Header("UI")] 
+    [SerializeField] Image _pieceDisplay;
     #region init and data
     private void Awake()
     {
@@ -82,15 +86,13 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
     {
         PopulatePieceQueue();
         heldPiece = PieceQueue.Dequeue();
+        SetPieceDisplay(heldPiece.type);
+        _pieceDisplay.enabled = true;
     }
 
-    private void PopulatePieceQueue()
-    {
-        for (int i = 0; i < piecesPerRound; i++)//I'd normally do just a few at a time but this is less code
-        {
-            PieceQueue.Enqueue(GetRandomPiece());
-        }
-    }
+    
+
+    
 
     private void OnDisable()
     {
@@ -118,8 +120,9 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
             {
                 selectedTile = grid.Nodes[tileCoord.x, tileCoord.y];
                 //TODO: selection highlight object
+
                 tileSelectionHighlighterTransform.position = new Vector3(selectedTile.Position.x*grid.TileSize,0f,selectedTile.Position.y*grid.TileSize);
-                //Debug.Log(hit.point);//TODO: Remove logs
+
             }
             
         }
@@ -154,9 +157,7 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
         //confirm
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log(selectedTile.Coord + ",  " + selectedTile.StateNode);
-            //TODO: check all tile covered by the piece
-            if (CannotConstructWallOn(selectedTile))
+            if (!CanConstructWallOn(selectedTile))
             {
                 StopAllCoroutines();
                 StartCoroutine(HighlighterErrorFeedback());
@@ -166,6 +167,23 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
             
             Instantiate(wallPrefab, tileSelectionHighlighterTransform.position, quaternion.identity);
             selectedTile.StateNode = EnumStateNode.wall;
+            var targetPosition = new Vector2(selectedTile.Coord.x, selectedTile.Coord.y) * grid.TileSize;
+            var tileSize = grid.TileSize;
+            var neutralHeight = 0f;//set it to max expected height if we reuse the ray-casting trick
+
+            for (int i = 0; i < heldPiece.tiles.Length; i++)
+            {
+                var currentWorkingTile = selectedTile.Coord + heldPiece.tiles[i];
+                Instantiate(standalone, new Vector3( currentWorkingTile.x * tileSize,neutralHeight,currentWorkingTile.y *tileSize), quaternion.identity);
+                grid.Nodes[currentWorkingTile.x, currentWorkingTile.y].StateNode = EnumStateNode.wall;
+            }
+
+            heldPiece = PieceQueue.Dequeue();
+            SetPieceDisplay(heldPiece.type);
+            if (PieceQueue.Count == 0)
+            {
+                GameManager.Instance.NextMode();
+            }
         }
         //rotate piece
         if (Input.GetMouseButtonDown(1))
@@ -173,19 +191,20 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
             RotatePiece90Clockwise(ref heldPiece);
         }
     }
+    
+    private bool CanConstructWallOn(Node selection)
+    {
+        for (int i = 0; i < heldPiece.tiles.Length; i++)
+        {
+            var pieceTile = heldPiece.tiles[i];
+            var tile = grid.Nodes[selection.Coord.x + pieceTile.x, selection.Coord.y + pieceTile.y];
+            if (tile.StateNode == EnumStateNode.water ||
+                tile.StateNode == EnumStateNode.tower ||
+                tile.StateNode == EnumStateNode.wall ||
+                tile.StateNode == EnumStateNode.castle) return false;
+        }
 
-    public Node GetNodeWithCoords(float x, float z)
-    {
-        return grid[(int)x, (int)z];
-    }
-   
-    private bool CannotConstructWallOn(Node tile)
-    {
-        return tile.StateNode == EnumStateNode.water ||
-               tile.StateNode == EnumStateNode.tower ||
-               tile.StateNode == EnumStateNode.wall ||
-               tile.StateNode == EnumStateNode.castle ||
-               tile == null;
+        return true;
     }
     
     private IEnumerator HighlighterErrorFeedback()
@@ -208,11 +227,42 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
 
     private WallPiece GetRandomPiece()
     {
-        var typeSelect = Random.Range(0, 2);
+        var typeSelect = Random.Range(0, 3);
         WallPiece piece = new WallPiece((WallpieceType)typeSelect);
         
         //TODO: add random rotation
         return piece;
+    }
+    private void PopulatePieceQueue()
+    {
+        for (int i = 0; i < piecesPerRound; i++)//I'd normally do just a few at a time but this is less code
+        {
+            PieceQueue.Enqueue(GetRandomPiece());
+        }
+    }
+
+    [SerializeField] private Sprite pointSprite;
+    [SerializeField] private Sprite cornerSprite;
+    [SerializeField] private Sprite barSprite;
+    private void SetPieceDisplay(WallpieceType heldPieceType)
+    {
+        switch (heldPieceType)
+        {
+            case WallpieceType.Point:
+                _pieceDisplay.sprite = pointSprite;
+                break;
+            case WallpieceType.Corner:
+                _pieceDisplay.sprite = cornerSprite;
+                break;
+            case WallpieceType.Bar:
+                _pieceDisplay.sprite = barSprite;
+                break;
+            default:
+                _pieceDisplay.sprite = null;
+                break;
+        }
+
+        _pieceDisplay.rectTransform.rotation = quaternion.identity;
     }
     #region Tilesets
 
@@ -229,40 +279,77 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
         Down = 64,
         DownLeft = 128
     }
+
+    [Header("wall prefabs")] 
+    [SerializeField] private GameObject crossWall;
+    [SerializeField] private GameObject cornerPath;
+    [SerializeField] private GameObject deadEnd;
+    [SerializeField] private GameObject tIntersection;
+    [SerializeField] private GameObject walkPath;
+    [SerializeField] private GameObject invertedCorner;//fully surrounded exept a diagonal tile
+    [SerializeField] private GameObject flat;
+    [SerializeField] private GameObject corner;//three consecutive neighbors
+    [SerializeField] private GameObject standalone;
     private void RunTileSetRulesOnHeldPiece()//updating the highlighter to show the proper piece
     {
         
     }
-
+    //TODO: finish tileset rules
     private void RunTileSetRules(WallPiece piece, Vector2Int origin)//gaze not unto the abyss lest it gazes back unto you
     {
-        NeighboringWalls flag = ((grid.Nodes[origin.x - 1, origin.y].StateNode == EnumStateNode.wall)
-                                   ? NeighboringWalls.Left
-                                   : NeighboringWalls.None) |
-                               ((grid.Nodes[origin.x - 1, origin.y + 1].StateNode == EnumStateNode.wall)
-                                   ? NeighboringWalls.UpLeft
-                                   : NeighboringWalls.None) |
-                               ((grid.Nodes[origin.x, origin.y + 1].StateNode == EnumStateNode.wall)
-                                   ? NeighboringWalls.Up
-                                   : NeighboringWalls.None) |
-                               ((grid.Nodes[origin.x + 1, origin.y + 1].StateNode == EnumStateNode.wall)
-                                   ? NeighboringWalls.UpRight
-                                   : NeighboringWalls.None) |
-                               ((grid.Nodes[origin.x + 1, origin.y].StateNode == EnumStateNode.wall)
-                                   ? NeighboringWalls.Right
-                                   : NeighboringWalls.None) |
-                               ((grid.Nodes[origin.x + 1, origin.y - 1].StateNode == EnumStateNode.wall)
-                                   ? NeighboringWalls.DownRight
-                                   : NeighboringWalls.None) |
-                               ((grid.Nodes[origin.x, origin.y - 1].StateNode == EnumStateNode.wall)
-                                   ? NeighboringWalls.Down
-                                   : NeighboringWalls.None) |
-                               ((grid.Nodes[origin.x - 1, origin.y - 1].StateNode == EnumStateNode.wall)
-                                   ? NeighboringWalls.DownLeft
-                                   : NeighboringWalls.None);
+        for (int i = 0; i < piece.tiles.Length; i++)
+        {
+            var pieceTile = piece.tiles[i];
+            var targetCoordinates = new Vector2(origin.x + pieceTile.x, origin.y + pieceTile.y) * grid.TileSize;
+            var flag = NeighboringWallsFlagCheck(origin);
+            //Cross case
+            if (flag == (NeighboringWalls.Down | NeighboringWalls.Up | NeighboringWalls.Left | NeighboringWalls.Right))
+            {
 
+                Instantiate(crossWall, new Vector3(targetCoordinates.x, 0f, targetCoordinates.y),
+                    quaternion.identity);
+                
+            }
+            //corner path
+            
+        }
         
     }
+
+    private void RunTileSetRules(Node tile, Vector2Int coordinates)
+    {
+        
+    }
+
+    private NeighboringWalls NeighboringWallsFlagCheck(Vector2Int origin)
+    {
+        NeighboringWalls flag = ((grid.Nodes[origin.x - 1, origin.y].StateNode == EnumStateNode.wall)
+                                    ? NeighboringWalls.Left
+                                    : NeighboringWalls.None) |
+                                ((grid.Nodes[origin.x - 1, origin.y + 1].StateNode == EnumStateNode.wall)
+                                    ? NeighboringWalls.UpLeft
+                                    : NeighboringWalls.None) |
+                                ((grid.Nodes[origin.x, origin.y + 1].StateNode == EnumStateNode.wall)
+                                    ? NeighboringWalls.Up
+                                    : NeighboringWalls.None) |
+                                ((grid.Nodes[origin.x + 1, origin.y + 1].StateNode == EnumStateNode.wall)
+                                    ? NeighboringWalls.UpRight
+                                    : NeighboringWalls.None) |
+                                ((grid.Nodes[origin.x + 1, origin.y].StateNode == EnumStateNode.wall)
+                                    ? NeighboringWalls.Right
+                                    : NeighboringWalls.None) |
+                                ((grid.Nodes[origin.x + 1, origin.y - 1].StateNode == EnumStateNode.wall)
+                                    ? NeighboringWalls.DownRight
+                                    : NeighboringWalls.None) |
+                                ((grid.Nodes[origin.x, origin.y - 1].StateNode == EnumStateNode.wall)
+                                    ? NeighboringWalls.Down
+                                    : NeighboringWalls.None) |
+                                ((grid.Nodes[origin.x - 1, origin.y - 1].StateNode == EnumStateNode.wall)
+                                    ? NeighboringWalls.DownLeft
+                                    : NeighboringWalls.None);
+        return flag;
+    }
+
     #endregion
     
     /////////////////////////////////////////// TEST VALID ZONE PATHFINDING ///////////////////////////////////
