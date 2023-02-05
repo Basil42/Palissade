@@ -3,6 +3,53 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
+public enum WallpieceType
+{
+    Point,
+    Corner,
+    Bar
+}
+public struct WallPiece
+{
+    public Vector2Int[] tiles;
+    public WallpieceType type;
+
+    public WallPiece(WallpieceType type)
+    {
+        switch (type)
+        {
+            case WallpieceType.Point:
+                this.tiles = new Vector2Int[1];
+                this.tiles[0] = Vector2Int.zero;
+                this.type = WallpieceType.Point;
+                break;
+            case WallpieceType.Corner:
+                this.tiles = new Vector2Int[3];
+                this.tiles[0] = Vector2Int.left;
+                this.tiles[1] = Vector2Int.zero;
+                this.tiles[2] = Vector2Int.up;
+                this.type = WallpieceType.Corner;
+                break;
+            case WallpieceType.Bar:
+                this.tiles = new Vector2Int[3];
+                this.tiles[0] = Vector2Int.left;
+                this.tiles[1] = Vector2Int.zero;
+                this.tiles[2] = Vector2Int.right;
+                this.type = WallpieceType.Bar;
+                break;
+            default:
+                Debug.LogWarning("invalid tile type, generating point tile");
+                this.tiles = new Vector2Int[1];
+                this.tiles[0] = Vector2Int.zero;
+                this.type = WallpieceType.Point;
+                break;
+        }
+        
+    }
+}
+
 
 public class Wallbuilder : MonoBehaviour
 {
@@ -12,6 +59,8 @@ public class Wallbuilder : MonoBehaviour
     private Camera camRef;
     [SerializeField] private Transform tileSelectionHighlighterTransform;
     [SerializeField] private GameObject wallPrefab;//TODO some kind of 3D tileset, good luck future me
+    private Queue<WallPiece> PieceQueue;//most likely only 2  pieces long at most
+    
     private void Awake()
     {
         camRef = Camera.main;
@@ -70,5 +119,23 @@ public class Wallbuilder : MonoBehaviour
     {
         //TODO: make the highlighter flash red
         yield break;
+    }
+
+    private WallPiece GetRandomPiece()
+    {
+        var typeSelect = Random.Range(0, 2);
+        WallPiece piece = new WallPiece((WallpieceType)typeSelect);
+        
+        //TODO: add random rotation
+        return piece;
+    }
+
+    internal void RotatePiece90clockwise(ref WallPiece piece)//rotation around the 0,0 axis
+    {
+        for (int i = 0; i < piece.tiles.Length; i++)
+        {
+            var value = piece.tiles[i];
+            piece.tiles[i] = new Vector2Int(value.y, -value.x);
+        }
     }
 }
