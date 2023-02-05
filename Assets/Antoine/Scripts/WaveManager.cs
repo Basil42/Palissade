@@ -19,6 +19,8 @@ public class WaveManager : Singleton<WaveManager>
     [SerializeField, Tooltip("Destinations des navires")]
     private Transform[] destinationsShips;
 
+    public List<ShipBehavior> shipsList = new List<ShipBehavior>();
+
     private void Awake()
     {
         GameManager.OnEnterAttackMode += () =>
@@ -54,6 +56,9 @@ public class WaveManager : Singleton<WaveManager>
 
             // On donne au bateau une destination
             ship.GetComponent<ShipBehavior>().destination = destinationsShips[Random.Range(0, destinationsShips.Length)];
+
+            // On ajoute le bateau à la liste des bateaux acitfs
+            shipsList.Add(ship.GetComponent<ShipBehavior>());
         }
 
         _waveInProgress = true;
@@ -73,6 +78,12 @@ public class WaveManager : Singleton<WaveManager>
         if(_waveInProgress && _timer >= waveDuration)
         {
             Debug.Log("Fin de la vague");
+            _waveInProgress = false;
+            GameManager.Instance.NextMode();
+        }
+        else if(shipsList.Count <= 0)
+        {
+            Debug.Log("Fin de la vague par manque d'ennemi");
             _waveInProgress = false;
             GameManager.Instance.NextMode();
         }
