@@ -51,7 +51,7 @@ public struct WallPiece
 }
 
 
-public class Wallbuilder : MonoBehaviour
+public class Wallbuilder : MonoBehaviour//Only enable while placing walls
 {
     private Node SelectedTile;
     [SerializeField] Level grid;
@@ -64,6 +64,21 @@ public class Wallbuilder : MonoBehaviour
     private void Awake()
     {
         camRef = Camera.main;
+    }
+
+    private void OnEnable()
+    {
+        PopulatePieceQueue();
+    }
+
+    private void PopulatePieceQueue()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void OnDisable()
+    {
+        PieceQueue.Clear();
     }
 
     private RaycastHit hit;
