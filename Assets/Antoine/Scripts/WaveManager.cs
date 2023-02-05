@@ -6,7 +6,9 @@ public class WaveManager : Singleton<WaveManager>
 {
     private float _timer;
 
+
     [Tooltip("Durée d'une vague d'attaque")]
+
     public float waveDuration = 10;
 
     public GameObject ennemiPrefab;
@@ -45,11 +47,11 @@ public class WaveManager : Singleton<WaveManager>
         int ships = CalculHowManyShips();
         for (int i = 0; i < ships; i++)
         {
-            // On prend un spawn aléatoire de la liste
+            // On prend un spawn alÃ©atoire de la liste
             Transform t = spawnsFree[Random.Range(0, spawnsFree.Count)];
             // On instancie le bateau
             GameObject ship = Instantiate(ennemiPrefab, t.position, t.rotation);
-            // On l'enlève de la liste
+            // On l'enlÃ¨ve de la liste
             spawnsFree.Remove(t);
 
             // On donne au bateau une destination
