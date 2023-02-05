@@ -13,7 +13,7 @@ public class LevelManager : MonoBehaviour
 
     // Gizmos qui affiche la map
 
-    /*private void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
         for (int y = 0; y < levelRef.Height; y++)
         {
@@ -33,6 +33,9 @@ public class LevelManager : MonoBehaviour
                     case EnumStateNode.tower:
                         Gizmos.color = Color.black;
                         break;
+                    case EnumStateNode.castle:
+                        Gizmos.color = Color.red;
+                        break;
                     default:
                         Gizmos.color = Color.white;
                         break;
@@ -41,5 +44,5 @@ public class LevelManager : MonoBehaviour
                 Gizmos.DrawCube(new Vector3(x, y) + transform.position, Vector2.one);
             }
         }
-    }*/
+    }
 }

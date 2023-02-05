@@ -33,10 +33,40 @@ public class Level : ScriptableObject
             {
                 _nodes[x, y] = new Node(x, y);
 
+                // Chateau
+                if (x == 20 && y == 20) _nodes[x, y].StateNode = EnumStateNode.castle;
+                if (x == 21 && y == 20) _nodes[x, y].StateNode = EnumStateNode.castle;
+                if (x == 20 && y == 21) _nodes[x, y].StateNode = EnumStateNode.castle;
+                if (x == 21 && y == 21) _nodes[x, y].StateNode = EnumStateNode.castle;
+
+                // ligne mur gauche
+                for (int i = 0; i < 8; i++)
+                {
+                    if (x == 17 && y == 17 + i ) _nodes[x, y].StateNode = EnumStateNode.wall;
+                }
+
+                //Ligne mur droit
+                for (int i = 0; i < 8; i++)
+                {
+                    if (x == 24 && y == 17 + i) _nodes[x, y].StateNode = EnumStateNode.wall;
+                }
+
+                //Ligne mur bas
+                for (int i = 0; i < 8; i++)
+                {
+                    if (x == 17 + i && y == 17) _nodes[x, y].StateNode = EnumStateNode.wall;
+                }
+
+                //Ligne mur haut
+                for (int i = 0; i < 8; i++)
+                {
+                    if (x == 17 + i && y == 24) _nodes[x, y].StateNode = EnumStateNode.wall;
+                }
+
                 // Test state
-                if (x == 2 && y == 2) _nodes[x, y].StateNode = EnumStateNode.wall;
-                if (x == 5 && y == 5) _nodes[x, y].StateNode = EnumStateNode.water;
-                if (x == 5 && y == 4) _nodes[x, y].StateNode = EnumStateNode.water;
+                //if (x == 2 && y == 2) _nodes[x, y].StateNode = EnumStateNode.wall;
+                //if (x == 5 && y == 5) _nodes[x, y].StateNode = EnumStateNode.water;
+                //if (x == 5 && y == 4) _nodes[x, y].StateNode = EnumStateNode.water;
             }
         }
     }
