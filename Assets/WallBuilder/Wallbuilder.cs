@@ -3,8 +3,55 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class Wallbuilder : MonoBehaviour
+public enum WallpieceType
+{
+    Point,
+    Corner,
+    Bar
+}
+public struct WallPiece
+{
+    public Vector2Int[] tiles;
+    public WallpieceType type;
+
+    public WallPiece(WallpieceType type)
+    {
+        switch (type)
+        {
+            case WallpieceType.Point:
+                this.tiles = new Vector2Int[1];
+                this.tiles[0] = Vector2Int.zero;
+                this.type = WallpieceType.Point;
+                break;
+            case WallpieceType.Corner:
+                this.tiles = new Vector2Int[3];
+                this.tiles[0] = Vector2Int.left;
+                this.tiles[1] = Vector2Int.zero;
+                this.tiles[2] = Vector2Int.up;
+                this.type = WallpieceType.Corner;
+                break;
+            case WallpieceType.Bar:
+                this.tiles = new Vector2Int[3];
+                this.tiles[0] = Vector2Int.left;
+                this.tiles[1] = Vector2Int.zero;
+                this.tiles[2] = Vector2Int.right;
+                this.type = WallpieceType.Bar;
+                break;
+            default:
+                Debug.LogWarning("invalid tile type, generating point tile");
+                this.tiles = new Vector2Int[1];
+                this.tiles[0] = Vector2Int.zero;
+                this.type = WallpieceType.Point;
+                break;
+        }
+        
+    }
+}
+
+
+public class Wallbuilder : MonoBehaviour//Only enable while placing walls
 {
     private Node selectedTile;
     [SerializeField] Level grid;
@@ -12,14 +59,45 @@ public class Wallbuilder : MonoBehaviour
     private Camera camRef;
     [SerializeField] private Transform tileSelectionHighlighterTransform;
     [SerializeField] private GameObject wallPrefab;//TODO some kind of 3D tileset, good luck future me
-
-    private Node castle; // Node to begin for valid rempart testing
-
+    private Queue<WallPiece> PieceQueue = new();//most likely only 2  pieces long at most
+    private WallPiece heldPiece;//piece that the player is currently placing
+    public int piecesPerRound = 15;
+    #region init and data
     private void Awake()
     {
         camRef = Camera.main;
+        GameManager.OnEnterWallMode += () =>
+        {
+            this.enabled = true;
+        };
+        GameManager.OnExitWallMode += () =>
+        {
+            this.enabled = false;
+        };
+    }
+    //Not cleaning up on destroy, don't tell anyone
+    private void OnEnable()
+    {
+        PopulatePieceQueue();
+        heldPiece = PieceQueue.Dequeue();
     }
 
+    private void PopulatePieceQueue()
+    {
+        for (int i = 0; i < piecesPerRound; i++)//I'd normally do just a few at a time but this is less code
+        {
+            PieceQueue.Enqueue(GetRandomPiece());
+        }
+    }
+
+    private void OnDisable()
+    {
+        PieceQueue.Clear();
+    }
+
+    #endregion
+
+    #region input
     private RaycastHit hit;
     private Vector2Int tileCoord;
     void Update()
@@ -87,6 +165,11 @@ public class Wallbuilder : MonoBehaviour
             Instantiate(wallPrefab, tileSelectionHighlighterTransform.position, quaternion.identity);
             selectedTile.StateNode = EnumStateNode.wall;
         }
+        //rotate piece
+        if (Input.GetMouseButtonDown(1))
+        {
+            RotatePiece90Clockwise(ref heldPiece);
+        }
     }
 
     public Node GetNodeWithCoords(float x, float z)
@@ -109,6 +192,77 @@ public class Wallbuilder : MonoBehaviour
         yield break;
     }
 
+    internal void RotatePiece90Clockwise(ref WallPiece piece)//rotation around the 0,0 axis
+    {
+        for (int i = 0; i < piece.tiles.Length; i++)
+        {
+            var value = piece.tiles[i];
+            piece.tiles[i] = new Vector2Int(value.y, -value.x);
+        }
+    }
+    #endregion
+    
+    
+
+    private WallPiece GetRandomPiece()
+    {
+        var typeSelect = Random.Range(0, 2);
+        WallPiece piece = new WallPiece((WallpieceType)typeSelect);
+        
+        //TODO: add random rotation
+        return piece;
+    }
+    #region Tilesets
+
+    [Flags]
+    enum NeighboringWalls
+    {
+        None = 0,
+        Left = 1,
+        UpLeft = 2,
+        Up = 4,
+        UpRight = 8,
+        Right = 16,
+        DownRight = 32,
+        Down = 64,
+        DownLeft = 128
+    }
+    private void RunTileSetRulesOnHeldPiece()//updating the highlighter to show the proper piece
+    {
+        
+    }
+
+    private void RunTileSetRules(WallPiece piece, Vector2Int origin)//gaze not unto the abyss lest it gazes back unto you
+    {
+        NeighboringWalls flag = ((grid.Nodes[origin.x - 1, origin.y].StateNode == EnumStateNode.wall)
+                                   ? NeighboringWalls.Left
+                                   : NeighboringWalls.None) |
+                               ((grid.Nodes[origin.x - 1, origin.y + 1].StateNode == EnumStateNode.wall)
+                                   ? NeighboringWalls.UpLeft
+                                   : NeighboringWalls.None) |
+                               ((grid.Nodes[origin.x, origin.y + 1].StateNode == EnumStateNode.wall)
+                                   ? NeighboringWalls.Up
+                                   : NeighboringWalls.None) |
+                               ((grid.Nodes[origin.x + 1, origin.y + 1].StateNode == EnumStateNode.wall)
+                                   ? NeighboringWalls.UpRight
+                                   : NeighboringWalls.None) |
+                               ((grid.Nodes[origin.x + 1, origin.y].StateNode == EnumStateNode.wall)
+                                   ? NeighboringWalls.Right
+                                   : NeighboringWalls.None) |
+                               ((grid.Nodes[origin.x + 1, origin.y - 1].StateNode == EnumStateNode.wall)
+                                   ? NeighboringWalls.DownRight
+                                   : NeighboringWalls.None) |
+                               ((grid.Nodes[origin.x, origin.y - 1].StateNode == EnumStateNode.wall)
+                                   ? NeighboringWalls.Down
+                                   : NeighboringWalls.None) |
+                               ((grid.Nodes[origin.x - 1, origin.y - 1].StateNode == EnumStateNode.wall)
+                                   ? NeighboringWalls.DownLeft
+                                   : NeighboringWalls.None);
+
+        
+    }
+    #endregion
+    
     /////////////////////////////////////////// TEST VALID ZONE PATHFINDING ///////////////////////////////////
     #region
 
@@ -138,7 +292,7 @@ public class Wallbuilder : MonoBehaviour
             TestNeighbors(currentNode);
             came_from.Add(currentNode);
 
-            // Et arrêter si on a croisé un node water
+            // Et arrï¿½ter si on a croisï¿½ un node water
             if (!wayIsValid)
             {
                 Debug.Log("Remparts mauvais");
@@ -146,7 +300,7 @@ public class Wallbuilder : MonoBehaviour
             }
         }
 
-        Debug.Log("Toutes les tiles ont étés testées et valides");
+        Debug.Log("Toutes les tiles ont ï¿½tï¿½s testï¿½es et valides");
         return true;
     }
 
@@ -165,7 +319,7 @@ public class Wallbuilder : MonoBehaviour
 
     private void TestNeighbor(Node neighbor)
     {
-        // Si différent de là où on vient
+        // Si diffï¿½rent de lï¿½ oï¿½ on vient
         for (int i = 0; i < came_from.Count; i++)
         {
             if (neighbor == came_from[i])
@@ -174,7 +328,7 @@ public class Wallbuilder : MonoBehaviour
         // Et libre
         if (neighbor.StateNode == EnumStateNode.buildable)
         {
-            // On ajoute le node à la liste des trucs à gérer
+            // On ajoute le node ï¿½ la liste des trucs ï¿½ gï¿½rer
             // Et on met dans le dico
             if (!wayDico.ContainsKey(neighbor))
             {
