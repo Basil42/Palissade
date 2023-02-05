@@ -116,7 +116,6 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
                 SelectedTile = grid.Nodes[tileCoord.x, tileCoord.y];
                 //TODO: selection highlight object
                 tileSelectionHighlighterTransform.position = new Vector3(SelectedTile.Position.x*grid.TileSize,0f,SelectedTile.Position.y*grid.TileSize);
-                Debug.Log(hit.point);//TODO: Remove logs
             }
             
         }
@@ -133,7 +132,6 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
                 StartCoroutine(HighlighterErrorFeedback());
                 return;
             }
-            //TODO: apply the whole tetris piece after checking the relevant tiles for eligibility 
             var targetPosition = new Vector2(SelectedTile.Coord.x, SelectedTile.Coord.y) * grid.TileSize;
             var tileSize = grid.TileSize;
             var neutralHeight = 0f;//set it to max expected height if we reuse the ray-casting trick
@@ -228,6 +226,8 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
                 _pieceDisplay.sprite = null;
                 break;
         }
+
+        _pieceDisplay.rectTransform.rotation = quaternion.identity;
     }
     #region Tilesets
 
