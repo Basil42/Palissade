@@ -73,7 +73,6 @@ public class ShipBehavior : MonoBehaviour
         {
             Debug.Log("Pas de muraille détectée");
         }
-
     }
 
     public void Hit(int damage)
@@ -82,6 +81,8 @@ public class ShipBehavior : MonoBehaviour
         life -= damage;
         if(life <= 0)
         {
+            WaveManager.Instance.shipsList.Remove(this);
+
             isDestroyed= true;
             GetComponent<Renderer>().enabled = false;
             this.enabled = false;
