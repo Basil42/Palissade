@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBehaviour : MonoBehaviour
+/*public class EnemyBehaviour : MonoBehaviour
 {
     public int mLife;
     public float mSpeed;
@@ -27,4 +27,4 @@ public class EnemyBehaviour : MonoBehaviour
         transform.Translate((mDestination - transform.position)*mSpeed * Time.deltaTime);
 
     }
-}
+}*/

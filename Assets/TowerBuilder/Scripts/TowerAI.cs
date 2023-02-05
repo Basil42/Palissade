@@ -4,44 +4,76 @@ using UnityEngine;
 
 public class TowerAI : TowerBasic
 {
-
     public float mRayShoot;
     public float mSpeedShoot;
-    public float mCurrentTime;
+    private float mCurrentTime;
 
+    public ShipBehavior target;
 
-    void Shoot(){
-        if (mEnemies.Count != 0)
+    private void Awake()
+    {
+        GameManager.OnEnterAttackMode += () =>
         {
-            SortEnemy();
+            this.enabled = true;
+        };
+        GameManager.OnExitAttackMode += () =>
+        {
+            this.enabled = false;
+        };
+    }
+
+    void Shoot()
+    {
+        if (target != null)
+        {
+            //SortEnemy();
             Vector3 m = transform.position;
             m += Vector3.up * 2.0f;
-            ProjectileBehaviour ball = (ProjectileBehaviour) Instantiate(mProjectile, m,  transform.rotation );
-            ball.mEnemy = mEnemies[0];
+            ProjectileBehaviour ball = (ProjectileBehaviour)Instantiate(mProjectile, m, transform.rotation);
+            ball.mEnemy = target;
         }
-
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        ManageDeadEnemy();
-        if (mEnemies.Count != 0){
-            if (mCurrentTime < 0){
+        if (target != null && !target.isDestroyed)
+        {
+            if (mCurrentTime < 0)
+            {
                 Shoot();
                 mCurrentTime = mSpeedShoot;
-            }else{
-                mCurrentTime -= Time.deltaTime; 
+            }
+            else
+            {
+                mCurrentTime -= Time.deltaTime;
             }
         }
+        else
+        {
+            // Truc dégueu
+            ShipBehavior[] targets = FindObjectsOfType<ShipBehavior>();
+            foreach(ShipBehavior tmpTarget in targets) 
+            {
+                if(!tmpTarget.isDestroyed)
+                {
+                    target = tmpTarget;
+                    break;
+                }
+            }
 
-
-        // Shoot();
+           // target = FindObjectOfType<ShipBehavior>();
+        }
     }
+
+    /*public void SortEnemy()
+    {
+        target.Sort((enemy, enemy2) =>
+        {
+            if (enemy == null && enemy2 == null) return 0;
+            else if (enemy == null) return -1;
+            else if (enemy2 == null) return 1;
+            else return (Vector3.Distance(transform.position, enemy.gameObject.transform.position) < Vector3.Distance(transform.position, enemy2.gameObject.transform.position)) ? -1 : 1;
+        });
+        // Vector3.Distance(transform.position, obj.transform.position)
+    }*/
 }

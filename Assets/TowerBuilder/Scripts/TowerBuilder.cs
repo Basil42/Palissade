@@ -3,26 +3,38 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class TowerBuilder : MonoBehaviour
+public class TowerBuilder : Singleton<TowerBuilder>
 {
     private Node SelectedTile;
     [SerializeField] Level grid;
     private Camera camRef;
     private Vector3 mousePos;
     [SerializeField] private Transform tileSelectionHighlighterTransform;
-    //[SerializeField] private GameObject towerPrefab;//TODO some kind of 3D tileset, good luck future me
-    [SerializeField] private TowerAI towerPrefab;//TODO some kind of 3D tileset, good luck future me
 
-    // Start is called before the first frame update
+    public int towerNumber = 2;
+    private int towerCounter = 0;
+
+    [SerializeField] private GameObject towerPrefab;//TODO some kind of 3D tileset, good luck future me
+
     private void Awake()
     {
         camRef = Camera.main;
+
+        GameManager.OnEnterTowerMode += () =>
+        {
+            this.enabled = true;
+            Debug.Log("Tower mode");
+        };
+        GameManager.OnExitTowerMode += () =>
+        {
+            this.enabled = false;
+            Debug.Log("Tower mode stop");
+        };
     }
 
     private RaycastHit hit;
     private Vector2Int tileCoord;
 
-    // Update is called once per frame
     void Update()
     {
         mousePos = Input.mousePosition;
@@ -37,7 +49,7 @@ public class TowerBuilder : MonoBehaviour
                 SelectedTile = grid.Nodes[tileCoord.x, tileCoord.y];
                 //TODO: selection highlight object
                 tileSelectionHighlighterTransform.position = new Vector3(SelectedTile.Position.x * grid.TileSize, 0f, SelectedTile.Position.y * grid.TileSize);
-                Debug.Log(hit.point);//TODO: Remove logs
+                    //Debug.Log(hit.point);//TODO: Remove logs
             }
 
         }
@@ -58,7 +70,15 @@ public class TowerBuilder : MonoBehaviour
             //TODO: apply the whole tetris piece after checking the relevant tiles for eligibility 
 
             Instantiate(towerPrefab, tileSelectionHighlighterTransform.position, quaternion.identity);
-            SelectedTile.StateNode = EnumStateNode.wall;
+            SelectedTile.StateNode = EnumStateNode.tower;
+            towerCounter++;
+            Debug.Log(towerCounter + " tour placée");
+
+            if (towerCounter >= towerNumber)
+            {
+                towerCounter = 0;
+                GameManager.Instance.NextMode();
+            }
         }
     }
 

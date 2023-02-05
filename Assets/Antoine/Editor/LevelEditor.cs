@@ -13,10 +13,7 @@ public class LevelEditor : Editor
         LevelRenderer level = target as LevelRenderer;
         EditorGUILayout.Space();
 
-        if (GUILayout.Button("Generate"))
-        {
-            level.GenerateLevel();
-        }
+
 
         if(GUILayout.Button("DestroyAll"))
         {

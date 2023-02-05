@@ -6,7 +6,6 @@ public class WaveManager : Singleton<WaveManager>
 {
     private float _timer;
 
-
     [Tooltip("Durée d'une vague d'attaque")]
     public float waveDuration = 10;
 
@@ -19,6 +18,25 @@ public class WaveManager : Singleton<WaveManager>
 
     [SerializeField, Tooltip("Destinations des navires")]
     private Transform[] destinationsShips;
+
+    private void Awake()
+    {
+        GameManager.OnEnterAttackMode += () =>
+        {
+            this.enabled = true;
+            Debug.Log("Attack mode");
+        };
+        GameManager.OnExitAttackMode += () =>
+        {
+            this.enabled = false;
+            Debug.Log("Attack mode stop");
+        };
+    }
+
+    private void OnEnable()
+    {
+        LunchWave();
+    }
 
     public void LunchWave()
     {
@@ -39,6 +57,7 @@ public class WaveManager : Singleton<WaveManager>
         }
 
         _waveInProgress = true;
+        _timer = 0;
     }
 
     private int CalculHowManyShips()
