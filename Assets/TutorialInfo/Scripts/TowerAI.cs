@@ -16,7 +16,7 @@ public class TowerAI : TowerBasic
             SortEnemy();
             Vector3 m = transform.position;
             m += Vector3.up * 2.0f;
-            ProjectileBehaviour ball = Instantiate(mProjectile, m,  transform.rotation );
+            ProjectileBehaviour ball = (ProjectileBehaviour) Instantiate(mProjectile, m,  transform.rotation );
             ball.mEnemy = mEnemies[0];
         }
 

@@ -5,12 +5,24 @@ using UnityEngine;
 
 public class TowerManual : TowerBasic
 {
-    private Camera camera;
+    private new Camera camera;
+    [SerializeField] private Vector3 mMousePosition;
+
     // Start is called before the first frame update
     void Start()
     {
         camera = Camera.main;
     }
+
+    void Shoot()
+    {
+        Debug.Log("TowerManual");
+        Vector3 m = transform.position;
+        //m += Vector3.up * 2.0f;
+        ProjectileBasic ball = (ProjectileBasic) Instantiate(mProjectile, m, transform.rotation);
+        ball.mDestPos = mMousePosition;
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -24,9 +36,13 @@ public class TowerManual : TowerBasic
 
             if (Physics.Raycast(ray, out hit))
             {
-                Debug.Log($"{hit.collider.name} Detected",
-                    hit.collider.gameObject);
+                Debug.Log($"{hit.collider.name} Detected", hit.collider.gameObject);
+               
+                mMousePosition = hit.point;
+                
+                Shoot();
             }
+
             //RandomColor();
         }
     }

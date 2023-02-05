@@ -9,13 +9,9 @@ public class TowerBasic : MonoBehaviour
     // public List<GameObject> mEnemies;
     public int mLife;
 
-    public ProjectileBehaviour mProjectile; 
+    public ProjectileBasic mProjectile; 
 
     void Shoot(){
-        // cherche un enemis et lui tire dessus
-
-
-        // 
     }
 
     // Start is called before the first frame update
