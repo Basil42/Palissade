@@ -400,7 +400,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84dd72a8dcd35214e9e2cfb01cbb0c21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grid: {fileID: 11400000, guid: 709c84525ed21eb41b1021d818e4eb39, type: 2}
   tileSelectionHighlighterTransform: {fileID: 565586371}
+  wallPrefab: {fileID: 7242657289619476213, guid: 74f22ba7b8511bc40b57e1bb31fb720c,
+    type: 3}
+  piecesPerRound: 15
 --- !u!4 &565586371 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9007970551897421307, guid: 326d009204c4a5e418ee629dc7e50e6d,

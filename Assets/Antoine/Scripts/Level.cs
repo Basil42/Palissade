@@ -33,8 +33,8 @@ public class Level : ScriptableObject
                 _nodes[x, y] = new Node(x, y);
 
                 // Test state
-                if (x == 1 && y == 1) _nodes[x, y].StateNode = EnumStateNode.water;
-                if (x == 1 && y == 2) _nodes[x, y].StateNode = EnumStateNode.water;
+                if (x == 5 && y == 5) _nodes[x, y].StateNode = EnumStateNode.water;
+                if (x == 5 && y == 4) _nodes[x, y].StateNode = EnumStateNode.water;
             }
         }
     }
