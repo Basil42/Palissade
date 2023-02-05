@@ -377,8 +377,8 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
         came_from = new List<Node>();
         wayDico = new Dictionary<Node, Node>();
 
-        // 1,1 c'est la position free garantie
-        grid[1, 1].StateNode = EnumStateNode.castle;
+        // 22,22 c'est la position devant le chateau
+        grid[22, 22].StateNode = EnumStateNode.castle;
         frontier.Enqueue(grid[1,1]);
         came_from.Add(grid[1, 1]);
 
