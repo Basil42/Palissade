@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ProjectileBasic : MonoBehaviour
 {
+    [Min(1)] public int damage = 2;
     public float mSpeed;
     public float mTime;
     public float mDeltaTime;
@@ -24,14 +25,13 @@ public class ProjectileBasic : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        //if(other.GetComponentInParent)
-        if (other.tag == "Enemy")
+        Debug.Log("Test 1 " + other.gameObject.name);
+        if(other.TryGetComponent(out ShipBehavior ship))
         {
-            other.GetComponent<EnemyBehaviour>().mLife -= 1;
-            Destroy(gameObject);
+            Debug.Log("Test 2");
+            ship.Hit(damage);
         }
     }
-    // Update is called once per frame
 
     public void Fly()
     {
