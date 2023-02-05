@@ -130,7 +130,7 @@ public class Wallbuilder : MonoBehaviour
         return piece;
     }
 
-    internal void RotatePiece90clockwise(ref WallPiece piece)//rotation around the 0,0 axis
+    internal void RotatePiece90Clockwise(ref WallPiece piece)//rotation around the 0,0 axis
     {
         for (int i = 0; i < piece.tiles.Length; i++)
         {
