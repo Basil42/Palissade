@@ -25,10 +25,8 @@ public class ProjectileBasic : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Test 1 " + other.gameObject.name);
         if(other.TryGetComponent(out ShipBehavior ship))
         {
-            Debug.Log("Test 2");
             ship.Hit(damage);
         }
     }

@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using UnityEngine.SceneManagement;
 
 public enum WallpieceType
 {
@@ -182,7 +183,15 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
             SetPieceDisplay(heldPiece.type);
             if (PieceQueue.Count == 0)
             {
-                GameManager.Instance.NextMode();
+                if(CheckRampartAreValid())
+                {
+                    GameManager.Instance.NextMode();
+                }
+                else
+                {
+                    Debug.Log("GAME OVER");
+                    SceneManager.LoadScene(0);
+                }
             }
         }
         //rotate piece
