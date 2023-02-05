@@ -2,16 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaveManager : MonoBehaviour
+public class WaveManager : Singleton<WaveManager>
 {
-    private int round;
+    private float _timer;
 
-    [Tooltip("Nombre de vague d'ennemi pour une époque")]
-    public int roundByEra = 3;
 
-    // Era
+    [Tooltip("Durée d'une vague d'attaque")]
+    public float waveDuration = 10;
 
-    public GameObject ennemiGameObject;
+    public GameObject ennemiPrefab;
+
+    public bool _waveInProgress;
 
     [SerializeField, Tooltip("Points d'apparitions des navires")]
     private Transform[] spawShips;
@@ -19,21 +20,17 @@ public class WaveManager : MonoBehaviour
     [SerializeField, Tooltip("Destinations des navires")]
     private Transform[] destinationsShips;
 
-    private void Start()
-    {
-        LunchWave();
-    }
-
     public void LunchWave()
     {
         List<Transform> spawnsFree = new List<Transform>(spawShips);
 
-        for (int i = 0; i < 3 + round; i++)
+        int ships = CalculHowManyShips();
+        for (int i = 0; i < ships; i++)
         {
             // On prend un spawn aléatoire de la liste
             Transform t = spawnsFree[Random.Range(0, spawnsFree.Count)];
             // On instancie le bateau
-            GameObject ship = Instantiate(ennemiGameObject, t.position, t.rotation);
+            GameObject ship = Instantiate(ennemiPrefab, t.position, t.rotation);
             // On l'enlève de la liste
             spawnsFree.Remove(t);
 
@@ -41,11 +38,24 @@ public class WaveManager : MonoBehaviour
             ship.GetComponent<ShipBehavior>().destination = destinationsShips[Random.Range(0, destinationsShips.Length)];
         }
 
-        round++;
+        _waveInProgress = true;
+    }
 
-        if (round >= roundByEra)
+    private int CalculHowManyShips()
+    {
+        int ships = 3 + GameManager.Instance.round;
+        return ships;
+    }
+
+    private void Update()
+    {
+        _timer += Time.deltaTime;
+
+        if(_waveInProgress && _timer >= waveDuration)
         {
-            Debug.Log("Dernière vague");
+            Debug.Log("Fin de la vague");
+            _waveInProgress = false;
+            GameManager.Instance.NextMode();
         }
     }
 }
