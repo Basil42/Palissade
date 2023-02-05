@@ -43,12 +43,14 @@ public class GameManager : Singleton<GameManager>
     public static Action OnExitWallMode;
     public static Action OnEnterAttackMode;
     public static Action OnExitAttackMode;
+
     private void Start()
     {
         actualEra = Era.Roman;
 
         gameMode = GameMode.TowerMode;
-        OnEnterAttackMode?.Invoke();
+        OnEnterTowerMode?.Invoke();
+
         cam.cullingMask = mode2D;
         isMode2D = true;
     }
@@ -81,17 +83,17 @@ public class GameManager : Singleton<GameManager>
                 OnExitTowerMode?.Invoke();
                 // On passe en 3D
                 ChangeGraphicMode();
+
                 gameMode = GameMode.AttackMode;
-                
-                WaveManager.Instance.LunchWave();
+
                 OnEnterAttackMode?.Invoke();
                 break;
 
             case GameMode.RampartMode:
                 OnExitWallMode?.Invoke();
+
                 gameMode = GameMode.TowerMode;
-                
-                // Appel placementSystem
+
                 OnEnterTowerMode?.Invoke();
                 break;
 
@@ -105,14 +107,14 @@ public class GameManager : Singleton<GameManager>
                     NewEra();
                     ChangeGraphicMode();
                     gameMode = GameMode.RampartMode;
-                    // Appel placementSystem
+
                     OnEnterWallMode?.Invoke();
                 }
                 else
                 {
                     ChangeGraphicMode();
                     gameMode = GameMode.RampartMode;
-                    // Appel placementSystem
+
                     OnEnterWallMode?.Invoke();
                 }
                 break;

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 [CreateAssetMenu()]
 public class Level : ScriptableObject
 {
@@ -33,6 +34,7 @@ public class Level : ScriptableObject
                 _nodes[x, y] = new Node(x, y);
 
                 // Test state
+                if (x == 2 && y == 2) _nodes[x, y].StateNode = EnumStateNode.wall;
                 if (x == 5 && y == 5) _nodes[x, y].StateNode = EnumStateNode.water;
                 if (x == 5 && y == 4) _nodes[x, y].StateNode = EnumStateNode.water;
             }

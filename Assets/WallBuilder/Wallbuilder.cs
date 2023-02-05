@@ -69,10 +69,12 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
         GameManager.OnEnterWallMode += () =>
         {
             this.enabled = true;
+            Debug.Log("Wall mode");
         };
         GameManager.OnExitWallMode += () =>
         {
             this.enabled = false;
+            Debug.Log("Wall mode stop");
         };
     }
     //Not cleaning up on destroy, don't tell anyone
