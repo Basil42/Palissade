@@ -16,14 +16,16 @@ public class TowerManual : TowerBasic
 
     void Shoot()
     {
-        Vector3 m = transform.position;
-        //m += Vector3.up * 2.0f;
-        ProjectileBasic ball = (ProjectileBasic) Instantiate(mProjectile, m, transform.rotation);
-        ball.mDestPos = mMousePosition;
+        if(GameManager.Instance.ActualGameMode == GameMode.AttackMode)
+        {
+                //Debug.Log("CastleShoot");
+            Vector3 m = transform.position;
+            //m += Vector3.up * 2.0f;
+            ProjectileBasic ball = (ProjectileBasic)Instantiate(mProjectile, m, transform.rotation);
+            ball.mDestPos = mMousePosition;
+        }
     }
 
-
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetMouseButtonDown(0))

@@ -28,7 +28,7 @@ public class GameManager : Singleton<GameManager>
     public Camera cam;
 
     [SerializeField]
-    private GameMode gameMode = GameMode.TowerMode;
+    private GameMode gameMode = GameMode.TowerMode; public GameMode ActualGameMode => gameMode;
     [SerializeField]
     private Era actualEra;
 
@@ -124,7 +124,7 @@ public class GameManager : Singleton<GameManager>
                 break;
         }
 
-        Debug.Log(gameMode + ", round " + round) ;
+            //Debug.Log(gameMode + ", round " + round) ;
     }
 
     private void NewEra()

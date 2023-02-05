@@ -72,7 +72,7 @@ public class TowerBuilder : Singleton<TowerBuilder>
             Instantiate(towerPrefab, tileSelectionHighlighterTransform.position, quaternion.identity);
             SelectedTile.StateNode = EnumStateNode.tower;
             towerCounter++;
-            Debug.Log(towerCounter + " tour placée");
+                //Debug.Log(towerCounter + " tour placée");
 
             if (towerCounter >= towerNumber)
             {
