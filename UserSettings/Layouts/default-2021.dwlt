@@ -48,7 +48,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 20
+  controlID: 53
 --- !u!114 &3
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -223,7 +223,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 21
+  controlID: 54
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -248,7 +248,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 22
+  controlID: 55
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -346,24 +346,24 @@ MonoBehaviour:
     m_SceneHandles: 
     m_ShowAllHits: 0
     m_SkipHidden: 0
-    m_SearchArea: 3
+    m_SearchArea: 1
     m_Folders:
-    - Assets/Mode/Prefab/Modern_Rampart
+    - Assets/Data/3DTiles/Faubourg Age 3
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Mode/Prefab/Modern_Rampart
+  - Assets/Data/3DTiles/Faubourg Age 3
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\super\OneDrive - e-artsup\Documents\Unity Project\Palissade
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 120}
-    m_SelectedIDs: 026e0000
-    m_LastClickedID: 28162
-    m_ExpandedIDs: 000000008c6a00001c6c00002c6c00002e6c0000306c0000326c000000ca9a3b
+    scrollPos: {x: 0, y: 60}
+    m_SelectedIDs: aa6f0000
+    m_LastClickedID: 28586
+    m_ExpandedIDs: 000000001c690000c06a0000c46a0000d46a0000da6a0000de6a0000f66b000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -391,7 +391,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000008c6a0000
+    m_ExpandedIDs: 000000001c690000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -476,7 +476,8 @@ MonoBehaviour:
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
     m_SaveData: []
-  m_ObjectsLockedBeforeSerialization: []
+  m_ObjectsLockedBeforeSerialization:
+  - {fileID: 2100000, guid: 647b6a00b556d79448b1aea154e03eff, type: 2}
   m_InstanceIDsLockedBeforeSerialization: 
   m_PreviewResizer:
     m_CachedPref: 160
@@ -487,7 +488,7 @@ MonoBehaviour:
   m_GlobalObjectId: 
   m_InspectorMode: 0
   m_LockTracker:
-    m_IsLocked: 0
+    m_IsLocked: 1
   m_PreviewWindow: {fileID: 0}
 --- !u!114 &15
 MonoBehaviour:
@@ -521,9 +522,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: ea6f0000
+      m_SelectedIDs: 36710000
       m_LastClickedID: 0
-      m_ExpandedIDs: b410fefff430feff4656feff367afeff7891feff56a5feff34c7fefff0ebfeff1e0effffd03bffff2a48ffff6696ffffd4f9ffff
+      m_ExpandedIDs: b285feffce89fefff689feff9a93feffa093feffa493feffa893feffb493feffb693feffb893feffba93feffbc93feffe8b8feffe2f2feff9c49ffff9e49ffffa049ffffa249ffffae49ffffb049ffff448cffff4a8cffff508cffff528cffff548cffff568cffff8ab5ffff8cb5ffff92b5ffff98b5ffff9cb5ffff9eb5ffff5ae6ffff2efbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -828,9 +829,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 0.89106536, y: 2.2010791, z: -0.7984607}
+    m_Target: {x: 0.116381645, y: 0.44384336, z: -0.5159436}
     speed: 2
-    m_Value: {x: 0.89106536, y: 2.2010791, z: -0.7984607}
+    m_Value: {x: 0.116381645, y: 0.44384336, z: -0.5159436}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -877,17 +878,17 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.15567932, y: 0.0014894818, z: -0.00026595689, w: 0.9878571}
+    m_Target: {x: 0.35934165, y: 0.6055598, z: -0.35356784, w: 0.615909}
     speed: 2
-    m_Value: {x: 0.15715155, y: 0.004451715, z: -0.0007396361, w: 0.9875642}
+    m_Value: {x: 0.35838473, y: 0.6060341, z: -0.35262665, w: 0.61639076}
   m_Size:
-    m_Target: 2.889505
+    m_Target: 4.8295503
     speed: 2
-    m_Value: 2.889505
+    m_Value: 4.8295503
   m_Ortho:
-    m_Target: 0
+    m_Target: 1
     speed: 2
-    m_Value: 0
+    m_Value: 1
   m_CameraSettings:
     m_Speed: 1.0646999
     m_SpeedNormalized: 0.53
