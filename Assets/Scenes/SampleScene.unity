@@ -417,6 +417,7 @@ GameObject:
   - component: {fileID: 1134323619}
   - component: {fileID: 1134323618}
   - component: {fileID: 1134323621}
+  - component: {fileID: 1134323622}
   m_Layer: 0
   m_Name: Terrain
   m_TagString: Untagged
@@ -496,15 +497,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 962f3b8766a31cd46938b5bac1b7fc96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gridRef:
-    rid: -2
+  _gridRef: {fileID: 11400000, guid: 709c84525ed21eb41b1021d818e4eb39, type: 2}
   terrainRef: {fileID: 1134323619}
   boroughPrefabs:
   - {fileID: 7412134259254103931, guid: c3ee380e18c0c034b842e268bdcecbb8, type: 3}
   maxTerrainHeight: 10
   debug: 1
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
+--- !u!114 &1134323622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1134323617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45fb6feb078be2f49b0df7a298d7a1d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelRef: {fileID: 11400000, guid: 709c84525ed21eb41b1021d818e4eb39, type: 2}
