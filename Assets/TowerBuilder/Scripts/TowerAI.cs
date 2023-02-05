@@ -27,10 +27,14 @@ public class TowerAI : TowerBasic
         if (target != null)
         {
             //SortEnemy();
+            //..playFXShoot();
             Vector3 m = transform.position;
             m += Vector3.up * 2.0f;
             ProjectileBehaviour ball = (ProjectileBehaviour)Instantiate(mProjectile, m, transform.rotation);
             ball.mEnemy = target;
+            m_vfxShoot.transform.rotation = ball.transform.rotation;
+            m_vfxShoot.Play();
+
         }
     }
 

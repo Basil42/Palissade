@@ -12,6 +12,8 @@ public class ProjectileBasic : MonoBehaviour
     public Vector3 mDestPos;
     public AnimationCurve mAnimationCurve;
     protected Collider m_ObjectCollider;
+    public ParticleSystem mVFXDamage;
+
 
 
     // Start is called before the first frame update
@@ -30,6 +32,8 @@ public class ProjectileBasic : MonoBehaviour
         {
             Debug.Log("Test 2");
             ship.Hit(damage);
+            //mVFXDamage.transform.position = ship.transform.position;
+            //mVFXDamage.Play();
         }
     }
 

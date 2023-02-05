@@ -111,6 +111,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10448a00c9796024a8c8b1db5b4acb6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mVFXDamage: {fileID: 9109206508476801786, guid: 2343e5bfc836ddc419029fca64365134,
+    type: 3}
   projectilePrefab: {fileID: 7002183676487954265, guid: c451cb6fa8400c0438820727022a2930,
     type: 3}
   isDestroyed: 0

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ShipBehavior : MonoBehaviour
 {
+    public ParticleSystem mVFXDamage;
+
     public GameObject projectilePrefab;
 
     public bool isDestroyed = false;
@@ -79,7 +81,8 @@ public class ShipBehavior : MonoBehaviour
     {
         Debug.Log("SHIP HIT");
         life -= damage;
-        if(life <= 0)
+        mVFXDamage.Play();
+        if (life <= 0)
         {
             WaveManager.Instance.shipsList.Remove(this);
 
