@@ -179,6 +179,54 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
         return piece;
     }
     #region Tilesets
+
+    [Flags]
+    enum NeighboringWalls
+    {
+        None = 0,
+        Left = 1,
+        UpLeft = 2,
+        Up = 4,
+        UpRight = 8,
+        Right = 16,
+        DownRight = 32,
+        Down = 64,
+        DownLeft = 128
+    }
+    private void RunTileSetRulesOnHeldPiece()//updating the highlighter to show the proper piece
+    {
+        
+    }
+
+    private void RunTileSetRules(WallPiece piece, Vector2Int origin)//gaze not unto the abyss lest it gazes back unto you
+    {
+        NeighboringWalls flag = ((grid.Nodes[origin.x - 1, origin.y].StateNode == EnumStateNode.wall)
+                                   ? NeighboringWalls.Left
+                                   : NeighboringWalls.None) |
+                               ((grid.Nodes[origin.x - 1, origin.y + 1].StateNode == EnumStateNode.wall)
+                                   ? NeighboringWalls.UpLeft
+                                   : NeighboringWalls.None) |
+                               ((grid.Nodes[origin.x, origin.y + 1].StateNode == EnumStateNode.wall)
+                                   ? NeighboringWalls.Up
+                                   : NeighboringWalls.None) |
+                               ((grid.Nodes[origin.x + 1, origin.y + 1].StateNode == EnumStateNode.wall)
+                                   ? NeighboringWalls.UpRight
+                                   : NeighboringWalls.None) |
+                               ((grid.Nodes[origin.x + 1, origin.y].StateNode == EnumStateNode.wall)
+                                   ? NeighboringWalls.Right
+                                   : NeighboringWalls.None) |
+                               ((grid.Nodes[origin.x + 1, origin.y - 1].StateNode == EnumStateNode.wall)
+                                   ? NeighboringWalls.DownRight
+                                   : NeighboringWalls.None) |
+                               ((grid.Nodes[origin.x, origin.y - 1].StateNode == EnumStateNode.wall)
+                                   ? NeighboringWalls.Down
+                                   : NeighboringWalls.None) |
+                               ((grid.Nodes[origin.x - 1, origin.y - 1].StateNode == EnumStateNode.wall)
+                                   ? NeighboringWalls.DownLeft
+                                   : NeighboringWalls.None);
+
+        
+    }
     #endregion
     
 }
