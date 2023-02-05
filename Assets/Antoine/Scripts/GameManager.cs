@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,14 +37,18 @@ public class GameManager : Singleton<GameManager>
 
     private bool isMode2D;
 
-
+    public static Action OnEnterTowerMode;
+    public static Action OnExitTowerMode;
+    public static Action OnEnterWallMode;
+    public static Action OnExitWallMode;
+    public static Action OnEnterAttackMode;
+    public static Action OnExitAttackMode;
     private void Start()
     {
         actualEra = Era.Roman;
 
         gameMode = GameMode.TowerMode;
-        // Appel placementSystem
-
+        OnEnterAttackMode?.Invoke();
         cam.cullingMask = mode2D;
         isMode2D = true;
     }
@@ -73,21 +78,25 @@ public class GameManager : Singleton<GameManager>
         switch (gameMode)
         {
             case GameMode.TowerMode:
+                OnExitTowerMode?.Invoke();
                 // On passe en 3D
                 ChangeGraphicMode();
                 gameMode = GameMode.AttackMode;
-
+                
                 WaveManager.Instance.LunchWave();
+                OnEnterAttackMode?.Invoke();
                 break;
 
             case GameMode.RampartMode:
+                OnExitWallMode?.Invoke();
                 gameMode = GameMode.TowerMode;
-
+                
                 // Appel placementSystem
+                OnEnterTowerMode?.Invoke();
                 break;
 
             case GameMode.AttackMode:
-
+                OnExitAttackMode?.Invoke();
                 round++;
 
                 if (round >= roundByEra)
@@ -97,12 +106,14 @@ public class GameManager : Singleton<GameManager>
                     ChangeGraphicMode();
                     gameMode = GameMode.RampartMode;
                     // Appel placementSystem
+                    OnEnterWallMode?.Invoke();
                 }
                 else
                 {
                     ChangeGraphicMode();
                     gameMode = GameMode.RampartMode;
                     // Appel placementSystem
+                    OnEnterWallMode?.Invoke();
                 }
                 break;
 

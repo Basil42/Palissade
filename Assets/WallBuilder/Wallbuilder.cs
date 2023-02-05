@@ -59,21 +59,35 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
     private Camera camRef;
     [SerializeField] private Transform tileSelectionHighlighterTransform;
     [SerializeField] private GameObject wallPrefab;//TODO some kind of 3D tileset, good luck future me
-    private Queue<WallPiece> PieceQueue;//most likely only 2  pieces long at most
-    
+    private Queue<WallPiece> PieceQueue = new();//most likely only 2  pieces long at most
+    private WallPiece heldPiece;//piece that the player is currently placing
+    public int piecesPerRound = 15;
+    #region init and data
     private void Awake()
     {
         camRef = Camera.main;
+        GameManager.OnEnterWallMode += () =>
+        {
+            this.enabled = true;
+        };
+        GameManager.OnExitWallMode += () =>
+        {
+            this.enabled = false;
+        };
     }
-
+    //Not cleaning up on destroy, don't tell anyone
     private void OnEnable()
     {
         PopulatePieceQueue();
+        heldPiece = PieceQueue.Dequeue();
     }
 
     private void PopulatePieceQueue()
     {
-        throw new NotImplementedException();
+        for (int i = 0; i < piecesPerRound; i++)//I'd normally do just a few at a time but this is less code
+        {
+            PieceQueue.Enqueue(GetRandomPiece());
+        }
     }
 
     private void OnDisable()
@@ -81,6 +95,9 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
         PieceQueue.Clear();
     }
 
+    #endregion
+
+    #region input
     private RaycastHit hit;
     private Vector2Int tileCoord;
     void Update()
@@ -120,6 +137,11 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
             Instantiate(wallPrefab, tileSelectionHighlighterTransform.position, quaternion.identity);
             SelectedTile.StateNode = EnumStateNode.wall;
         }
+        //rotate piece
+        if (Input.GetMouseButtonDown(1))
+        {
+            RotatePiece90Clockwise(ref heldPiece);
+        }
     }
 
     private bool CanConstructWallOn(Node tile)
@@ -136,15 +158,6 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
         yield break;
     }
 
-    private WallPiece GetRandomPiece()
-    {
-        var typeSelect = Random.Range(0, 2);
-        WallPiece piece = new WallPiece((WallpieceType)typeSelect);
-        
-        //TODO: add random rotation
-        return piece;
-    }
-
     internal void RotatePiece90Clockwise(ref WallPiece piece)//rotation around the 0,0 axis
     {
         for (int i = 0; i < piece.tiles.Length; i++)
@@ -153,4 +166,19 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
             piece.tiles[i] = new Vector2Int(value.y, -value.x);
         }
     }
+    #endregion
+    
+    
+
+    private WallPiece GetRandomPiece()
+    {
+        var typeSelect = Random.Range(0, 2);
+        WallPiece piece = new WallPiece((WallpieceType)typeSelect);
+        
+        //TODO: add random rotation
+        return piece;
+    }
+    #region Tilesets
+    #endregion
+    
 }
