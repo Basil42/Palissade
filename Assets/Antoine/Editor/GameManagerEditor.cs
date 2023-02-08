@@ -12,11 +12,11 @@ public class GameManagerEditor : Editor
 
         GameManager _gameManager = target as GameManager;
         EditorGUILayout.Space();
-
-        if (GUILayout.Button("ChangeGraphicMode"))
-        {
-            _gameManager.ChangeGraphicMode();
-        }
+        //maybe moving this to the new class's inspector if it proves necessary (coroutine don't run at edit time)
+        // if (GUILayout.Button("ChangeGraphicMode"))
+        // {
+        //     _gameManager.ChangeGraphicMode();
+        // }
 
         if(GUILayout.Button("NextMode"))
         {
