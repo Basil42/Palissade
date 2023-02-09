@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu()]
 public class Level : ScriptableObject
 {
+    //TODO: store pregenerated tiles in the SO
     private Node[,] _nodes = null; public Node[,] Nodes => _nodes;
 
     [SerializeField] int _width = 3; public int Width => _width;
@@ -16,9 +17,9 @@ public class Level : ScriptableObject
 
     public Node this[int x, int y] => _nodes[x,y];
 
-    public Level(int widht, int height)
+    public Level(int width, int height)
     {
-        _width = widht;
+        _width = width;
         _height = height;
 
         initializeLevel();
