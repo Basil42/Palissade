@@ -18,9 +18,9 @@ public class LevelManager : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        for (int y = 0; y < levelRef.Height; y++)
+        for (int y = 0; y < levelRef.Nodes.GetLength(0); y++)
         {
-            for (int x = 0; x < levelRef.Width; x++)
+            for (int x = 0; x < LevelRef.Nodes.GetLength(1); x++)
             {
                 switch (levelRef[x, y].StateNode)
                 {
