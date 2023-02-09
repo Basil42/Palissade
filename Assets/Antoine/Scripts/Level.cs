@@ -6,7 +6,7 @@ using UnityEngine;
 public class Level : ScriptableObject
 {
     //TODO: store pregenerated tiles in the SO
-    private Node[,] _nodes = null; public Node[,] Nodes => _nodes;
+    private Node[,] _nodes = new Node[0,0]; public Node[,] Nodes => _nodes;
 
     [SerializeField] int _width = 3; public int Width => _width;
 

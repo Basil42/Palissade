@@ -18,6 +18,7 @@ public class LevelManager : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        if (levelRef.Nodes == null) return;//not sure why Nodes is null at editor time
         for (int y = 0; y < levelRef.Nodes.GetLength(0); y++)
         {
             for (int x = 0; x < LevelRef.Nodes.GetLength(1); x++)
