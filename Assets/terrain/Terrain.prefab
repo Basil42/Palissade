@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 4864627383147188214}
   - component: {fileID: 4864627383147188209}
   - component: {fileID: 4864627383147188210}
+  - component: {fileID: 5282987260057488429}
   m_Layer: 6
   m_Name: Terrain
   m_TagString: Untagged
@@ -196,3 +197,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelRef: {fileID: 11400000, guid: 709c84525ed21eb41b1021d818e4eb39, type: 2}
+  castle: {fileID: 6787151047232858539, guid: 5e98d1d007cd4f94889ecacb87853f95, type: 3}
+--- !u!114 &5282987260057488429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4864627383147188213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59d4d0f0820b16c4c96a8afd31779d1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startsIn2dMode: 0
+  cam: {fileID: 0}
+  neutralCameraPosition3D: {x: 121.8, y: 60, z: 45}
+  neutralCameraPosition2D: {x: 125, y: 60, z: 81}
+  neutral2DRotation: {x: 90, y: 0, z: 0}
+  neutralCameraRotation: {x: 60, y: 10, z: 0}
+  spriteMapRenderer: {fileID: 4864627382090017640}
+  transitionDuration: 2.5
+  cameraSnappingDuration: 0.5
