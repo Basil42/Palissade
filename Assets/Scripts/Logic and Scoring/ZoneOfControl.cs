@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,11 +5,11 @@ public class ZoneOfControl : Singleton<ZoneOfControl>
 {
     #region
     
-    private Node currentNode;
-    public Queue<Node> frontier;
-    private List<Node> came_from;
-    private Dictionary<Node, Node> wayDico;
-    private bool wayIsValid;
+    private Node _currentNode;
+    public Queue<Node> Frontier;
+    private List<Node> _cameFrom;
+    private Dictionary<Node, Node> _wayDico;
+    private bool _wayIsValid;
     private Level _grid;
     private void Start()
     {
@@ -20,26 +18,26 @@ public class ZoneOfControl : Singleton<ZoneOfControl>
 
     public bool CheckRampartAreValid()
     {
-        wayIsValid = true;
-        frontier = new Queue<Node>();
-        came_from = new List<Node>();
-        wayDico = new Dictionary<Node, Node>();
+        _wayIsValid = true;
+        Frontier = new Queue<Node>();
+        _cameFrom = new List<Node>();
+        _wayDico = new Dictionary<Node, Node>();
 
         // 22,22 c'est la position devant le chateau
         _grid[22, 22].StateNode = EnumStateNode.castle;
-        frontier.Enqueue(_grid[1,1]);
-        came_from.Add(_grid[1, 1]);
+        Frontier.Enqueue(_grid[1,1]);
+        _cameFrom.Add(_grid[1, 1]);
 
 
-        while (frontier.Count != 0)
+        while (Frontier.Count != 0)
         {
             // On prend le premier node dans la Queue et on teste ses voisins
-            currentNode = frontier.Dequeue();
-            TestNeighbors(currentNode);
-            came_from.Add(currentNode);
+            _currentNode = Frontier.Dequeue();
+            TestNeighbors(_currentNode);
+            _cameFrom.Add(_currentNode);
 
             // Et arr�ter si on a crois� un node water
-            if (!wayIsValid)
+            if (!_wayIsValid)
             {
                 Debug.Log("Remparts mauvais");
                 return false;
@@ -66,9 +64,9 @@ public class ZoneOfControl : Singleton<ZoneOfControl>
     private void TestNeighbor(Node neighbor)
     {
         // Si diff�rent de l� o� on vient
-        for (int i = 0; i < came_from.Count; i++)
+        for (int i = 0; i < _cameFrom.Count; i++)
         {
-            if (neighbor == came_from[i])
+            if (neighbor == _cameFrom[i])
                 return;
         }
         // Et libre
@@ -76,16 +74,16 @@ public class ZoneOfControl : Singleton<ZoneOfControl>
         {
             // On ajoute le node � la liste des trucs � g�rer
             // Et on met dans le dico
-            if (!wayDico.ContainsKey(neighbor))
+            if (!_wayDico.ContainsKey(neighbor))
             {
-                frontier.Enqueue(neighbor);
-                wayDico.Add(neighbor, currentNode);
+                Frontier.Enqueue(neighbor);
+                _wayDico.Add(neighbor, _currentNode);
             }
 
         }
         else if(neighbor.StateNode == EnumStateNode.water)
         {
-            wayIsValid = false;
+            _wayIsValid = false;
         }
     }
 

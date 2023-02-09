@@ -140,29 +140,7 @@ public class WallBuilder : MonoBehaviour//Only enable while placing walls
         {
             Debug.LogWarning("selected outside the terrain!");
         }
-
-        /* //Test Antoine version
-        //Capte la position de la souris
-        mousePos = Input.mousePosition;
-        // Rayon de la souris par rapport  la camra
-        Ray ray = camRef.ScreenPointToRay(mousePos);
-        // Cration d'une variable Raycast ncessaire pour le out de la fonction Raycast
-
-        //Si le raycast de la souris sur l'ecran est en contact avec un objet de layer "Structure"
-        if (Physics.Raycast(ray, out hit))
-        {
-            Debug.DrawRay(ray.origin, ray.direction * 100, Color.green);
-
-            selectedTile = GetNodeWithCoords(hit.collider.transform.position.x, hit.transform.position.z);
-
-            //TODO: selection highlight object
-            tileSelectionHighlighterTransform.position = new Vector3(selectedTile.Position.x * grid.TileSize, 0f, selectedTile.Position.y * grid.TileSize);
-        }
-        else
-        {
-            selectedTile = null;
-            return;
-        }*/
+        
 
         //confirm
         if (Input.GetMouseButtonDown(0))
