@@ -432,15 +432,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   round: 0
   roundByEra: 3
-  cam: {fileID: 764446548}
   gameMode: 0
   actualEra: 0
-  mode2D:
-    serializedVersion: 2
-    m_Bits: 183
-  mode3D:
-    serializedVersion: 2
-    m_Bits: 119
 --- !u!4 &501630653
 Transform:
   m_ObjectHideFlags: 0
@@ -1277,12 +1270,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84dd72a8dcd35214e9e2cfb01cbb0c21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grid: {fileID: 11400000, guid: 709c84525ed21eb41b1021d818e4eb39, type: 2}
   tileSelectionHighlighterTransform: {fileID: 210748077}
   wallPrefab: {fileID: 7242657289619476213, guid: 74f22ba7b8511bc40b57e1bb31fb720c,
     type: 3}
   piecesPerRound: 15
-  _pieceDisplay: {fileID: 316919484}
+  pieceDisplay: {fileID: 316919484}
   pointSprite: {fileID: 21300000, guid: ff8af519af885034e9ef654538f3a811, type: 3}
   cornerSprite: {fileID: 21300000, guid: 76d96745aa1a70e48aefddf6bbd0d828, type: 3}
   barSprite: {fileID: 21300000, guid: b29f7234b5d3ece42871db1eecd07538, type: 3}
@@ -1296,6 +1288,7 @@ MonoBehaviour:
   corner: {fileID: 0}
   standalone: {fileID: 7242657289619476213, guid: 74f22ba7b8511bc40b57e1bb31fb720c,
     type: 3}
+  debugDisplay: 0
 --- !u!4 &1980236783
 Transform:
   m_ObjectHideFlags: 0
