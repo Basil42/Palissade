@@ -66,7 +66,7 @@ public readonly struct WallPiece
 public class WallBuilder : MonoBehaviour//Only enable while placing walls
 {
     private Node _selectedTile;
-    [SerializeField] Level grid;
+    Level _grid;
     private Vector3 _mousePos;
     private Camera _camRef;
     [SerializeField] private Transform tileSelectionHighlighterTransform;
@@ -95,6 +95,7 @@ public class WallBuilder : MonoBehaviour//Only enable while placing walls
     //Not cleaning up on destroy, don't tell anyone
     private void OnEnable()
     {
+        _grid = LevelManager.Instance.LevelRef;
         PopulatePieceQueue();
         _heldPiece = _pieceQueue.Dequeue();
         SetPieceDisplay(_heldPiece.Type);
@@ -126,13 +127,13 @@ public class WallBuilder : MonoBehaviour//Only enable while placing walls
         if (Physics.Raycast(mouseRay, out hit))
         {
             
-            _tileCoord = new Vector2Int(Mathf.FloorToInt(hit.point.x/grid.TileSize),Mathf.FloorToInt( hit.point.z/grid.TileSize));
+            _tileCoord = new Vector2Int(Mathf.FloorToInt(hit.point.x/_grid.TileSize),Mathf.FloorToInt( hit.point.z/_grid.TileSize));
             if (_tileCoord != _selectedTile?.Position)
             {
-                _selectedTile = grid.Nodes[_tileCoord.x, _tileCoord.y];
+                _selectedTile = _grid.Nodes[_tileCoord.x, _tileCoord.y];
                 //TODO: selection highlight object
 
-                tileSelectionHighlighterTransform.position = new Vector3(_selectedTile.Position.x*grid.TileSize,0f,_selectedTile.Position.y*grid.TileSize);
+                tileSelectionHighlighterTransform.position = new Vector3(_selectedTile.Position.x*_grid.TileSize,0f,_selectedTile.Position.y*_grid.TileSize);
 
             }
             
@@ -156,14 +157,14 @@ public class WallBuilder : MonoBehaviour//Only enable while placing walls
             
             Instantiate(wallPrefab, tileSelectionHighlighterTransform.position, quaternion.identity);
             _selectedTile.StateNode = EnumStateNode.wall;
-            var tileSize = grid.TileSize;
+            var tileSize = _grid.TileSize;
             var neutralHeight = 0f;//set it to max expected height if we reuse the ray-casting trick
 
             for (int i = 0; i < _heldPiece.Tiles.Length; i++)
             {
                 var currentWorkingTile = _selectedTile.Coord + _heldPiece.Tiles[i];
                 Instantiate(standalone, new Vector3( currentWorkingTile.x * tileSize,neutralHeight,currentWorkingTile.y *tileSize), quaternion.identity);
-                grid.Nodes[currentWorkingTile.x, currentWorkingTile.y].StateNode = EnumStateNode.wall;
+                _grid.Nodes[currentWorkingTile.x, currentWorkingTile.y].StateNode = EnumStateNode.wall;
             }
 
             _heldPiece = _pieceQueue.Dequeue();
@@ -193,7 +194,7 @@ public class WallBuilder : MonoBehaviour//Only enable while placing walls
         for (int i = 0; i < _heldPiece.Tiles.Length; i++)
         {
             var pieceTile = _heldPiece.Tiles[i];
-            var tile = grid.Nodes[selection.Coord.x + pieceTile.x, selection.Coord.y + pieceTile.y];
+            var tile = _grid.Nodes[selection.Coord.x + pieceTile.x, selection.Coord.y + pieceTile.y];
             if (tile.StateNode == EnumStateNode.water ||
                 tile.StateNode == EnumStateNode.tower ||
                 tile.StateNode == EnumStateNode.wall ||
@@ -275,7 +276,7 @@ public class WallBuilder : MonoBehaviour//Only enable while placing walls
         Down = 64,
         DownLeft = 128
     }
-
+    //TODO: replace by SO containing references to a sprite and a mesh
     [Header("wall prefabs")] 
     [SerializeField] private GameObject crossWall;
     [SerializeField] private GameObject cornerPath;
@@ -290,13 +291,13 @@ public class WallBuilder : MonoBehaviour//Only enable while placing walls
     {
         
     }
-    //TODO: finish tileset rules
+    //TODO: finish tile set rules
     private void RunTileSetRules(WallPiece piece, Vector2Int origin)//gaze not unto the abyss lest it gazes back unto you
     {
         for (int i = 0; i < piece.Tiles.Length; i++)
         {
             var pieceTile = piece.Tiles[i];
-            var targetCoordinates = new Vector2(origin.x + pieceTile.x, origin.y + pieceTile.y) * grid.TileSize;
+            var targetCoordinates = new Vector2(origin.x + pieceTile.x, origin.y + pieceTile.y) * _grid.TileSize;
             var flag = NeighboringWallsFlagCheck(origin);
             //Cross case, easy as rotation doesn't matter
             if (flag == (NeighboringWalls.Down | NeighboringWalls.Up | NeighboringWalls.Left | NeighboringWalls.Right))
@@ -319,28 +320,28 @@ public class WallBuilder : MonoBehaviour//Only enable while placing walls
 
     private NeighboringWalls NeighboringWallsFlagCheck(Vector2Int origin)
     {
-        NeighboringWalls flag = ((grid.Nodes[origin.x - 1, origin.y].StateNode == EnumStateNode.wall)
+        NeighboringWalls flag = ((_grid.Nodes[origin.x - 1, origin.y].StateNode == EnumStateNode.wall)
                                     ? NeighboringWalls.Left
                                     : NeighboringWalls.None) |
-                                ((grid.Nodes[origin.x - 1, origin.y + 1].StateNode == EnumStateNode.wall)
+                                ((_grid.Nodes[origin.x - 1, origin.y + 1].StateNode == EnumStateNode.wall)
                                     ? NeighboringWalls.UpLeft
                                     : NeighboringWalls.None) |
-                                ((grid.Nodes[origin.x, origin.y + 1].StateNode == EnumStateNode.wall)
+                                ((_grid.Nodes[origin.x, origin.y + 1].StateNode == EnumStateNode.wall)
                                     ? NeighboringWalls.Up
                                     : NeighboringWalls.None) |
-                                ((grid.Nodes[origin.x + 1, origin.y + 1].StateNode == EnumStateNode.wall)
+                                ((_grid.Nodes[origin.x + 1, origin.y + 1].StateNode == EnumStateNode.wall)
                                     ? NeighboringWalls.UpRight
                                     : NeighboringWalls.None) |
-                                ((grid.Nodes[origin.x + 1, origin.y].StateNode == EnumStateNode.wall)
+                                ((_grid.Nodes[origin.x + 1, origin.y].StateNode == EnumStateNode.wall)
                                     ? NeighboringWalls.Right
                                     : NeighboringWalls.None) |
-                                ((grid.Nodes[origin.x + 1, origin.y - 1].StateNode == EnumStateNode.wall)
+                                ((_grid.Nodes[origin.x + 1, origin.y - 1].StateNode == EnumStateNode.wall)
                                     ? NeighboringWalls.DownRight
                                     : NeighboringWalls.None) |
-                                ((grid.Nodes[origin.x, origin.y - 1].StateNode == EnumStateNode.wall)
+                                ((_grid.Nodes[origin.x, origin.y - 1].StateNode == EnumStateNode.wall)
                                     ? NeighboringWalls.Down
                                     : NeighboringWalls.None) |
-                                ((grid.Nodes[origin.x - 1, origin.y - 1].StateNode == EnumStateNode.wall)
+                                ((_grid.Nodes[origin.x - 1, origin.y - 1].StateNode == EnumStateNode.wall)
                                     ? NeighboringWalls.DownLeft
                                     : NeighboringWalls.None);
         return flag;
@@ -356,7 +357,6 @@ public class WallBuilder : MonoBehaviour//Only enable while placing walls
         _guiStyle.fontSize = 32;
         if (_selectedTile != null && debugDisplay)
         {
-            
             GUILayout.Label($"selected Tile: {_selectedTile.Position}",_guiStyle);
         }
     }
