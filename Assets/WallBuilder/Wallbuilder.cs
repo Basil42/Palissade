@@ -63,7 +63,7 @@ public readonly struct WallPiece
 }
 
 
-public class WallBuilder : MonoBehaviour//Only enable while placing walls
+public class Wallbuilder : MonoBehaviour//Only enable while placing walls
 {
     private Node _selectedTile;
     Level _grid;
