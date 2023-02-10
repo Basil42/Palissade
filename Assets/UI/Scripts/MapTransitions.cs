@@ -113,4 +113,19 @@ public class MapTransitions : MonoBehaviour
         
         
     }
+    #if UNITY_EDITOR || DEVELOPMENT_BUILD
+    [SerializeField] private bool DegubDisplay = false;
+    private void OnGUI()
+    {
+        if (GUILayout.Button("2D view",GUILayout.Height(64), GUILayout.Width(128)))
+        {
+            ChangeGraphicsTo2D();
+        }
+
+        if (GUILayout.Button("3d view",GUILayout.Height(64), GUILayout.Width(128)))
+        {
+            ChangeGraphicsTo3D();
+        }
+    }
+#endif
 }

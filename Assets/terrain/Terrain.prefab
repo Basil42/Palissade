@@ -25,9 +25,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4864627382090017647}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 122, y: 0.1, z: 80}
-  m_LocalScale: {x: 5.122323, y: 3.8417423, z: 1.2805806}
-  m_ConstrainProportionsScale: 1
+  m_LocalPosition: {x: 394, y: 0.1, z: 349}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4864627383147188208}
   m_RootOrder: 0
@@ -77,8 +77,8 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_DrawMode: 1
+  m_Size: {x: 800, y: 700}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -212,10 +212,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startsIn2dMode: 0
   cam: {fileID: 0}
-  neutralCameraPosition3D: {x: 121.8, y: 60, z: 45}
-  neutralCameraPosition2D: {x: 125, y: 60, z: 81}
+  neutralCameraPosition3D: {x: 375, y: 232, z: 179}
+  neutralCameraPosition2D: {x: 375, y: 232, z: 400}
   neutral2DRotation: {x: 90, y: 0, z: 0}
   neutralCameraRotation: {x: 60, y: 10, z: 0}
   spriteMapRenderer: {fileID: 4864627382090017640}
   transitionDuration: 2.5
   cameraSnappingDuration: 0.5
+  DegubDisplay: 1

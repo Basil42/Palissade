@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -297,7 +298,7 @@ public class WallBuilder : MonoBehaviour//Only enable while placing walls
             var pieceTile = piece.Tiles[i];
             var targetCoordinates = new Vector2(origin.x + pieceTile.x, origin.y + pieceTile.y) * grid.TileSize;
             var flag = NeighboringWallsFlagCheck(origin);
-            //Cross case
+            //Cross case, easy as rotation doesn't matter
             if (flag == (NeighboringWalls.Down | NeighboringWalls.Up | NeighboringWalls.Left | NeighboringWalls.Right))
             {
 
@@ -306,7 +307,7 @@ public class WallBuilder : MonoBehaviour//Only enable while placing walls
                 
             }
             //corner path
-            
+            //TODO: finish tileset rules
         }
         
     }
@@ -346,4 +347,20 @@ public class WallBuilder : MonoBehaviour//Only enable while placing walls
     }
 
     #endregion
+    #if UNITY_EDITOR
+    #region Debug
+    private readonly GUIStyle _guiStyle = new GUIStyle();
+    [SerializeField] private bool debugDisplay = false;
+    private void OnGUI()
+    {
+        _guiStyle.fontSize = 32;
+        if (_selectedTile != null && debugDisplay)
+        {
+            
+            GUILayout.Label($"selected Tile: {_selectedTile.Position}",_guiStyle);
+        }
+    }
+
+    #endregion
+    #endif
 }
