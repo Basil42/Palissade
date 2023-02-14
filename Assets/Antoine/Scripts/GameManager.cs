@@ -51,6 +51,7 @@ public class GameManager : Singleton<GameManager>
             if (initialPhaseController != null)
             {
                 yield return StartCoroutine(initialPhaseController.CastleSelection());
+                yield return StartCoroutine(initialPhaseController.InitialWallBuilding());
             }
             OnExitOpeningMode?.Invoke();
         }
