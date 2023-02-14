@@ -70,5 +70,16 @@ public class Level : ScriptableObject
                 //if (x == 5 && y == 4) _nodes[x, y].StateNode = EnumStateNode.water;
             }
         }
+
+        
+    }
+    public Vector3 GetCenterWorldPosition(Vector2Int coord)
+    {
+        return new Vector3(coord.x * _tileSize, 0f, coord.y * _tileSize);
+    }
+
+    public Vector3 GetCenterWorldPosition(int xCoord, int yCoord)
+    {
+        return GetCenterWorldPosition(new Vector2Int(xCoord, yCoord));
     }
 }
