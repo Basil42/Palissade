@@ -955,5 +955,27 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 330585545}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4864627383147188215, guid: 29d81c6c704c03643a2877b4a54f3815, type: 3}
+    - {fileID: 4864627383147188214, guid: 29d81c6c704c03643a2877b4a54f3815, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 29d81c6c704c03643a2877b4a54f3815, type: 3}
+--- !u!1 &4864627382100437077 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3598265979622085141, guid: 29d81c6c704c03643a2877b4a54f3815,
+    type: 3}
+  m_PrefabInstance: {fileID: 4864627382100437076}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &4864627382100437078
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4864627382100437077}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 9127120572191758296, guid: b8ddcbbd7a5bb5c42bb11d7959453f14, type: 3}

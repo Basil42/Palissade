@@ -23,7 +23,8 @@ Material:
   m_Name: mapMat
   m_Shader: {fileID: -6465566751694194690, guid: 2ae10b5998f3ba947a9b7a5e101f5d25,
     type: 3}
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _TRANSITIONINOUT_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -116,7 +117,7 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Surface: 0
-    - _TRANSITIONINOUT: 0
+    - _TRANSITIONINOUT: 1
     - _WorkflowMode: 1
     - _ZWrite: 1
     - _transition: 0
