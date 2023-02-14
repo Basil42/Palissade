@@ -16,7 +16,7 @@ public enum Era
     Medieval,
     Modern
 }
-
+[RequireComponent(typeof(InitialPhaseController))]
 public class GameManager : Singleton<GameManager>
 {
     [Min(0)]
@@ -31,7 +31,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private Era actualEra;
 
-    [SerializeField] private InitialPhaseController initialPhaseController;
+    private InitialPhaseController initialPhaseController;
     public static event Action OnEnterTowerMode;
     public static event Action OnExitTowerMode;
     public static event Action OnEnterWallMode;
@@ -40,6 +40,11 @@ public class GameManager : Singleton<GameManager>
     public static event Action OnExitAttackMode;
     public static event Action OnEnterOpeningMode;
     public static event Action OnExitOpeningMode;
+
+    private void Awake()
+    {
+        initialPhaseController = GetComponent<InitialPhaseController>();
+    }
 
     private IEnumerator Start()
     {
