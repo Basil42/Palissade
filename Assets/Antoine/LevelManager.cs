@@ -6,7 +6,7 @@ using UnityEngine;
 public class LevelManager : Singleton<LevelManager>
 {
     [SerializeField] private Level levelRef; public Level LevelRef => levelRef;
-    public GameObject castle;
+    public GameObject castle;//this is a prefab
 
     void Awake()
     {

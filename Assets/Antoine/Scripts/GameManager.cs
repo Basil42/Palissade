@@ -1,11 +1,13 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public enum GameMode
 {
     TowerMode,
     RampartMode,
-    AttackMode
+    AttackMode,
+    StartingMode
 }
 
 public enum Era
@@ -25,29 +27,39 @@ public class GameManager : Singleton<GameManager>
 
 
     [SerializeField]
-    private GameMode gameMode = GameMode.TowerMode; public GameMode ActualGameMode => gameMode;
+    private GameMode gameMode = GameMode.StartingMode; public GameMode ActualGameMode => gameMode;
     [SerializeField]
     private Era actualEra;
 
+    [SerializeField] private InitialPhaseController initialPhaseController;
     public static event Action OnEnterTowerMode;
     public static event Action OnExitTowerMode;
     public static event Action OnEnterWallMode;
     public static event Action OnExitWallMode;
     public static event Action OnEnterAttackMode;
     public static event Action OnExitAttackMode;
+    public static event Action OnEnterOpeningMode;
+    public static event Action OnExitOpeningMode;
 
-    private void Start()
+    private IEnumerator Start()
     {
         actualEra = Era.Roman;
-        //TODO: snap the camera to 2D with an instant version of the transition
+        if (gameMode == GameMode.StartingMode)
+        {
+            OnEnterOpeningMode?.Invoke();
+            //Opening phase
+            if (initialPhaseController != null)
+            {
+                yield return StartCoroutine(initialPhaseController.CastleSelection());
+            }
+            OnExitOpeningMode?.Invoke();
+        }
+        
         gameMode = GameMode.TowerMode;
         OnEnterTowerMode?.Invoke();
         
     }
-    
-    
-    
-    
+
 
     /// <summary>
     /// Charge le mode de jeu suivant
