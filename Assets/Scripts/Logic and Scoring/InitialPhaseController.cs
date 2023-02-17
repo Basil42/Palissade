@@ -19,20 +19,7 @@ public class InitialPhaseController : MonoBehaviour
         Node SelectedTile = null;
         while (_selectedCastle == null)
         {
-            mousePos = Input.mousePosition;
-            MouseRay = camRef.ScreenPointToRay(mousePos);
-            if (Physics.Raycast(MouseRay, out hit))
-            {
-                _levelRef = LevelManager.Instance.LevelRef;
-                float tileSize = LevelManager.Instance.LevelRef.TileSize;
-                Vector2Int tileCoordinates = new Vector2Int(Mathf.FloorToInt(hit.point.x / tileSize),
-                    Mathf.FloorToInt(hit.point.y / tileSize));
-                if (tileCoordinates != SelectedTile?.Position)
-                {
-                    SelectedTile = _levelRef.Nodes[tileCoordinates.x, tileCoordinates.y];
-                    //TODO: highlight castle selection
-                }
-            }
+            SelectedTile = TileSelector.SelectedTile;
 
             if (Input.GetMouseButtonDown(0))
             {
