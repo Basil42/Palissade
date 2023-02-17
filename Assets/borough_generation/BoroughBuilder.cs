@@ -9,7 +9,6 @@ namespace borough_generation
 {
     public class BoroughBuilder : MonoBehaviour
     {
-        [SerializeReference] private Level _gridRef;
         [SerializeReference] private Terrain terrainRef;
         [SerializeField] private List<BoroughBehavior> boroughPrefabs;
         
@@ -21,13 +20,13 @@ namespace borough_generation
         {
             if (debug)
             {
-                if(_gridRef?.Nodes[0, 0] != null)CreateBorough(_gridRef.Nodes[0,0]);
+                if(LevelManager.Instance.LevelRef.Nodes[0, 0] != null)CreateBorough(LevelManager.Instance.LevelRef.Nodes[0,0]);
             }
         }
 
         private void ExtendBoroughs()
         {
-            foreach (var tile in _gridRef.Nodes)
+            foreach (var tile in LevelManager.Instance.LevelRef.Nodes)
             {
                 if (tile.ShouldCreateBorough())
                 {

@@ -21,6 +21,7 @@ public class InitialPhaseController : MonoBehaviour
                 if (selectedTile is { StateNode: EnumStateNode.castle })
                 {
                     _selectedCastle = selectedTile;
+                    Debug.Log("selected Castle");
                 }
                 else
                 {

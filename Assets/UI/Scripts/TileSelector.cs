@@ -33,10 +33,20 @@ public class TileSelector : Singleton<TileSelector>
             float tileSize = levelRef.TileSize;
             Vector2Int tileCoordinates = new Vector2Int(
                 Mathf.FloorToInt(_hit.point.x / tileSize),
-                Mathf.FloorToInt(_hit.point.y / tileSize));
+                Mathf.FloorToInt(_hit.point.z / tileSize));
+            tileCoordinates.Clamp(Vector2Int.zero,new Vector2Int(levelRef.Width,levelRef.Height));
             if (tileCoordinates != _selectedTile?.Position)
             {
-                _selectedTile = levelRef.Nodes[tileCoordinates.x, tileCoordinates.y];
+                try
+                {
+                    _selectedTile = levelRef.Nodes[tileCoordinates.x, tileCoordinates.y];
+
+                }
+                catch (System.IndexOutOfRangeException e)
+                {
+                    Console.WriteLine(e + $"index was {tileCoordinates}");
+                    throw;
+                }
             }
             #if UNITY_EDITOR
             Debug.Log("Selected tile: " + _selectedTile.Position);

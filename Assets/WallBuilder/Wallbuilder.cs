@@ -65,10 +65,7 @@ public readonly struct WallPiece
 
 public class Wallbuilder : MonoBehaviour//Only enable while placing walls
 {
-    private Node _selectedTile;
     Level _grid;
-    private Vector3 _mousePos;
-    private Camera _camRef;
     [SerializeField] private Transform tileSelectionHighlighterTransform;
     [SerializeField] private GameObject wallPrefab;//TODO some kind of 3D tileset, good luck future me
     private readonly Queue<WallPiece> _pieceQueue = new();//most likely only 2  pieces long at most
@@ -80,7 +77,6 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
     #region init and data
     private void Awake()
     {
-        _camRef = Camera.main;
         GameManager.OnEnterWallMode += () =>
         {
             this.enabled = true;
@@ -118,32 +114,13 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
     private Vector2Int _tileCoord;
     void Update()
     {
-        RaycastHit hit;
-
-        // Old Basile Version
-        _mousePos = Input.mousePosition;
-        Ray mouseRay = _camRef.ScreenPointToRay(_mousePos);
-        //selection
-        if (Physics.Raycast(mouseRay, out hit))
+        var _selectedTile = TileSelector.SelectedTile;
+        if (_tileCoord != TileSelector.SelectedTile?.Position && _selectedTile != null)
         {
-            
-            _tileCoord = new Vector2Int(Mathf.FloorToInt(hit.point.x/_grid.TileSize),Mathf.FloorToInt( hit.point.z/_grid.TileSize));
-            if (_tileCoord != _selectedTile?.Position)
-            {
-                _selectedTile = _grid.Nodes[_tileCoord.x, _tileCoord.y];
-                //TODO: selection highlight object
+            _tileCoord = _selectedTile.Position;
+            tileSelectionHighlighterTransform.position = new Vector3( _selectedTile.Position.x*_grid.TileSize,0f,_selectedTile.Position.y*_grid.TileSize);
 
-                tileSelectionHighlighterTransform.position = new Vector3(_selectedTile.Position.x*_grid.TileSize,0f,_selectedTile.Position.y*_grid.TileSize);
-
-            }
-            
         }
-        else
-        {
-            Debug.LogWarning("selected outside the terrain!");
-        }
-        
-
         //confirm
         if (Input.GetMouseButtonDown(0))
         {
@@ -355,9 +332,10 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
     private void OnGUI()
     {
         _guiStyle.fontSize = 32;
-        if (_selectedTile != null && debugDisplay)
+        var selectedTile = TileSelector.SelectedTile;
+        if (selectedTile != null && debugDisplay)
         {
-            GUILayout.Label($"selected Tile: {_selectedTile.Position}",_guiStyle);
+            GUILayout.Label($"selected Tile: {selectedTile.Position}",_guiStyle);
         }
     }
 
