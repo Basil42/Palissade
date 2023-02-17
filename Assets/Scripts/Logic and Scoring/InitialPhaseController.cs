@@ -10,6 +10,12 @@ public class InitialPhaseController : MonoBehaviour
 {
     Node _selectedCastle = null;
     private Level _levelRef;
+
+    private void Start()
+    {
+        _levelRef = LevelManager.Instance.LevelRef;
+    }
+
     internal IEnumerator CastleSelection()
     {
         while (_selectedCastle == null)
@@ -49,37 +55,38 @@ public class InitialPhaseController : MonoBehaviour
         var waiter = new WaitForSeconds(wallBuildingTimeStep);
         var castleCoord = _selectedCastle.Position;
         //upper left corner
+        
         Instantiate(
             cornerStartingWallPiece,
             new Vector3((_selectedCastle.Position.x - initialZoneOfControlExtent.x) * _levelRef.TileSize,0f,(_selectedCastle.Position.y + initialZoneOfControlExtent.y) * _levelRef.TileSize),
-            quaternion.Euler(0f,90f* cornerRotationOffset,0f));
+            quaternion.Euler(0f,0.5f * Mathf.PI * cornerRotationOffset,0f));
         yield return waiter;
         //upper path
         var startCoord = castleCoord.x - (initialZoneOfControlExtent.x - 1);
         var endCoord = castleCoord.x + (initialZoneOfControlExtent.x - 1);
         var staticCoordValue = _selectedCastle.Position.y + initialZoneOfControlExtent.y;
-        for (int x = startCoord; x < endCoord; x++)
+        for (int x = startCoord; x <= endCoord; x++)
         {
             Instantiate(pathStartingWallPiece,
                 _levelRef.GetCenterWorldPosition(new Vector2Int(x, staticCoordValue)),
-                    Quaternion.Euler(0f, 90f * pathRotationOffset, 0f));
+                    quaternion.Euler(0f, 0.5f * Mathf.PI  * pathRotationOffset, 0f));
             yield return waiter;
         }
         //upper right corner
         Instantiate(
             cornerStartingWallPiece,
             _levelRef.GetCenterWorldPosition(_selectedCastle.Position.x + initialZoneOfControlExtent.x,staticCoordValue),
-            quaternion.Euler(0f,90f * (1 +cornerRotationOffset),0f));
+            quaternion.Euler(0f,0.5f * Mathf.PI  * (1 +cornerRotationOffset),0f));
         yield return waiter;
         //right path
         startCoord = castleCoord.y + (initialZoneOfControlExtent.y-1);
         endCoord = castleCoord.y - (initialZoneOfControlExtent.y-1);
         staticCoordValue = _selectedCastle.Position.x + initialZoneOfControlExtent.x;
-        for (int y = startCoord; y < endCoord; y++)
+        for (int y = startCoord; y >= endCoord; y--)
         {
             Instantiate(pathStartingWallPiece,
                 _levelRef.GetCenterWorldPosition(new Vector2Int(staticCoordValue, y)),
-                Quaternion.Euler(0f, 90f * (pathRotationOffset + 1), 0f));
+                quaternion.Euler(0f, 0.5f * Mathf.PI  * (pathRotationOffset + 1), 0f));
             yield return waiter;
         }
         //lower right corner
@@ -87,34 +94,34 @@ public class InitialPhaseController : MonoBehaviour
             cornerStartingWallPiece,
             _levelRef.GetCenterWorldPosition(_selectedCastle.Position.x + initialZoneOfControlExtent.x,
                 _selectedCastle.Position.y - initialZoneOfControlExtent.y),
-            Quaternion.Euler(0f, 90f * (2 + cornerRotationOffset), 0f));
+            quaternion.Euler(0f, 0.5f * Mathf.PI  * (2 + cornerRotationOffset), 0f));
         yield return waiter;
         //lower path
         startCoord = castleCoord.x + (initialZoneOfControlExtent.x - 1);
         endCoord = castleCoord.x - (initialZoneOfControlExtent.x - 1);
         staticCoordValue = _selectedCastle.Position.y - initialZoneOfControlExtent.y;
-        for (int x = startCoord; x < endCoord; x++)
+        for (int x = startCoord; x >= endCoord; x--)
         {
             Instantiate(
                 pathStartingWallPiece,
                 _levelRef.GetCenterWorldPosition(x, staticCoordValue),
-                Quaternion.Euler(0f, 90f * (pathRotationOffset), 0f));
+                quaternion.Euler(0f, 0.5f * Mathf.PI  * (pathRotationOffset), 0f));
             yield return waiter;
         }
         //lower left corner
         Instantiate(cornerStartingWallPiece,
             _levelRef.GetCenterWorldPosition(castleCoord - initialZoneOfControlExtent),
-            Quaternion.Euler(0f, 90f * (3 * cornerRotationOffset), 0f));
+            quaternion.Euler(0f, 0.5f * Mathf.PI  * (3 + cornerRotationOffset), 0f));
         yield return waiter;
         //left path
         startCoord = castleCoord.y - (initialZoneOfControlExtent.y - 1);
         endCoord = castleCoord.y + (initialZoneOfControlExtent.y - 1);
         staticCoordValue = castleCoord.x - initialZoneOfControlExtent.x;
-        for (int y = startCoord; y < endCoord; y++)
+        for (int y = startCoord; y <= endCoord; y++)
         {
             Instantiate(pathStartingWallPiece,
                 _levelRef.GetCenterWorldPosition(staticCoordValue, y),
-                Quaternion.Euler(0f, 90f * pathRotationOffset, 0f));
+                quaternion.Euler(0f, 0.5f * Mathf.PI  * (1+ pathRotationOffset), 0f));
             yield return waiter;
         }
     }

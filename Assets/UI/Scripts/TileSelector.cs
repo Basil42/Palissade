@@ -63,7 +63,7 @@ public class TileSelector : Singleton<TileSelector>
     private void OnGUI()
     {
         
-        GUILayout.Label($"{_selectedTile.Position}",_style);
+        if(_selectedTile != null)GUILayout.Label($"{_selectedTile.Position}",_style);
     }
     #endif
 }

@@ -666,10 +666,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialZoneOfControlExtent: {x: 4, y: 3}
-  cornerRotationOffset: 0
-  pathRotationOffset: 0
-  cornerStartingWallPiece: {fileID: 0}
-  pathStartingWallPiece: {fileID: 0}
+  cornerRotationOffset: 1
+  pathRotationOffset: 1
+  cornerStartingWallPiece: {fileID: 6619025515708172653, guid: 9ce543e26796f164d979afe5752d5f2c,
+    type: 3}
+  pathStartingWallPiece: {fileID: 429196155393502579, guid: 430632efcb8312f47a25da40583cd50a,
+    type: 3}
   wallBuildingTimeStep: 0.5
 --- !u!114 &1044060271
 MonoBehaviour:
@@ -720,7 +722,8 @@ MonoBehaviour:
   cornerSprite: {fileID: 21300000, guid: 76d96745aa1a70e48aefddf6bbd0d828, type: 3}
   barSprite: {fileID: 21300000, guid: b29f7234b5d3ece42871db1eecd07538, type: 3}
   crossWall: {fileID: 0}
-  cornerPath: {fileID: 0}
+  cornerPath: {fileID: 2734062053102039957, guid: aadf97077bae4d24dbcce98d248b4e85,
+    type: 3}
   deadEnd: {fileID: 0}
   tIntersection: {fileID: 0}
   walkPath: {fileID: 0}
@@ -796,37 +799,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1336682492
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1336682493}
-  m_Layer: 0
-  m_Name: CornerWall
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1336682493
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1336682492}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4530414975576406103
 PrefabInstance:
