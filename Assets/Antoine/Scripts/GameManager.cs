@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum GameMode
@@ -30,7 +31,7 @@ public class GameManager : Singleton<GameManager>
     private GameMode gameMode = GameMode.StartingMode; public GameMode ActualGameMode => gameMode;
     [SerializeField]
     private Era actualEra;
-
+    
     private InitialPhaseController initialPhaseController;
     public static event Action OnEnterTowerMode;
     public static event Action OnExitTowerMode;
@@ -57,6 +58,10 @@ public class GameManager : Singleton<GameManager>
             {
                 yield return StartCoroutine(initialPhaseController.CastleSelection());
                 yield return StartCoroutine(initialPhaseController.InitialWallBuilding());
+            }
+            else
+            {
+                Debug.LogWarning("no initial phase controller found");
             }
             OnExitOpeningMode?.Invoke();
         }

@@ -7,12 +7,16 @@ public class LevelManager : Singleton<LevelManager>
 {
     [SerializeField] private Level levelRef; public Level LevelRef => levelRef;
     public GameObject castle;//this is a prefab
-
+    [Header("setup")] [SerializeField] private List<Vector2Int> castlesPositions;
     void Awake()
     {
         levelRef.initializeLevel();
 
-        Instantiate(castle, new Vector3(21 * 10, 0, 21 * 10), Quaternion.identity);
+        foreach (Vector2Int position in castlesPositions)
+        {
+            Instantiate(castle, levelRef.GetCenterWorldPosition(position),Quaternion.identity);
+            levelRef.Nodes[position.x, position.y].StateNode = EnumStateNode.castle;
+        }
     }
 
     // Gizmos qui affiche la map

@@ -20,6 +20,12 @@ public class TileSelector : Singleton<TileSelector>
     private void Awake()
     {
         _camRef = Camera.main;
+        #if UNITY_EDITOR
+        _style = new GUIStyle()
+        {
+            fontSize = 32
+        };
+#endif
     }
 
     // Update is called once per frame
@@ -48,9 +54,16 @@ public class TileSelector : Singleton<TileSelector>
                     throw;
                 }
             }
-            #if UNITY_EDITOR
-            Debug.Log("Selected tile: " + _selectedTile.Position);
-            #endif
+            
         }
     }
+
+    #if UNITY_EDITOR
+    private GUIStyle _style;
+    private void OnGUI()
+    {
+        
+        GUILayout.Label($"{_selectedTile.Position}",_style);
+    }
+    #endif
 }

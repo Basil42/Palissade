@@ -88,6 +88,12 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
             Debug.Log("Wall mode stop");
         };
     }
+
+    private void Start()
+    {
+        if (GameManager.Instance.ActualGameMode != GameMode.RampartMode) enabled = false;
+    }
+
     //Not cleaning up on destroy, don't tell anyone
     private void OnEnable()
     {
@@ -325,20 +331,5 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
     }
 
     #endregion
-    #if UNITY_EDITOR
-    #region Debug
-    private readonly GUIStyle _guiStyle = new GUIStyle();
-    [SerializeField] private bool debugDisplay = false;
-    private void OnGUI()
-    {
-        _guiStyle.fontSize = 32;
-        var selectedTile = TileSelector.SelectedTile;
-        if (selectedTile != null && debugDisplay)
-        {
-            GUILayout.Label($"selected Tile: {selectedTile.Position}",_guiStyle);
-        }
-    }
-
-    #endregion
-    #endif
+    
 }
