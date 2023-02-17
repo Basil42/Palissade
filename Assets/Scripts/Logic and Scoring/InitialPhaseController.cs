@@ -12,20 +12,15 @@ public class InitialPhaseController : MonoBehaviour
     private Level _levelRef;
     internal IEnumerator CastleSelection()
     {
-        Vector3 mousePos;
-        Ray MouseRay;
-        RaycastHit hit;
-        Camera camRef = Camera.main;
-        Node SelectedTile = null;
         while (_selectedCastle == null)
         {
-            SelectedTile = TileSelector.SelectedTile;
+            var selectedTile = TileSelector.SelectedTile;
 
             if (Input.GetMouseButtonDown(0))
             {
-                if (SelectedTile is { StateNode: EnumStateNode.castle })
+                if (selectedTile is { StateNode: EnumStateNode.castle })
                 {
-                    _selectedCastle = SelectedTile;
+                    _selectedCastle = selectedTile;
                 }
                 else
                 {
