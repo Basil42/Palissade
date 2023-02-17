@@ -77,7 +77,6 @@ public class ShipBehavior : MonoBehaviour
 
     public void Hit(int damage)
     {
-        Debug.Log("SHIP HIT");
         life -= damage;
         if(life <= 0)
         {

@@ -2,50 +2,60 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using UnityEngine.SceneManagement;
 
-public enum WallpieceType
+public enum WallPieceType
 {
     Point,
     Corner,
     Bar
 }
-public struct WallPiece
+public readonly struct WallPiece
 {
-    public Vector2Int[] tiles;
-    public WallpieceType type;
+    public readonly Vector2Int[] Tiles;
+    public readonly WallPieceType Type;
 
-    public WallPiece(WallpieceType type)
+    public void Rotate90Degrees()
+    {
+        for (int i = 0; i < Tiles.Length; i++)
+        {
+            var value = Tiles[i];
+            Tiles[i] = new Vector2Int(value.y, -value.x);
+        }
+    }
+    public WallPiece(WallPieceType type)
     {
         switch (type)
         {
-            case WallpieceType.Point:
-                this.tiles = new Vector2Int[1];
-                this.tiles[0] = Vector2Int.zero;
-                this.type = WallpieceType.Point;
+            case WallPieceType.Point:
+                this.Tiles = new Vector2Int[1];
+                this.Tiles[0] = Vector2Int.zero;
+                this.Type = WallPieceType.Point;
                 break;
-            case WallpieceType.Corner:
-                this.tiles = new Vector2Int[3];
-                this.tiles[0] = Vector2Int.left;
-                this.tiles[1] = Vector2Int.zero;
-                this.tiles[2] = Vector2Int.up;
-                this.type = WallpieceType.Corner;
+            case WallPieceType.Corner:
+                this.Tiles = new Vector2Int[3];
+                this.Tiles[0] = Vector2Int.left;
+                this.Tiles[1] = Vector2Int.zero;
+                this.Tiles[2] = Vector2Int.up;
+                this.Type = WallPieceType.Corner;
                 break;
-            case WallpieceType.Bar:
-                this.tiles = new Vector2Int[3];
-                this.tiles[0] = Vector2Int.left;
-                this.tiles[1] = Vector2Int.zero;
-                this.tiles[2] = Vector2Int.right;
-                this.type = WallpieceType.Bar;
+            case WallPieceType.Bar:
+                this.Tiles = new Vector2Int[3];
+                this.Tiles[0] = Vector2Int.left;
+                this.Tiles[1] = Vector2Int.zero;
+                this.Tiles[2] = Vector2Int.right;
+                this.Type = WallPieceType.Bar;
                 break;
             default:
                 Debug.LogWarning("invalid tile type, generating point tile");
-                this.tiles = new Vector2Int[1];
-                this.tiles[0] = Vector2Int.zero;
-                this.type = WallpieceType.Point;
+                this.Tiles = new Vector2Int[1];
+                this.Tiles[0] = Vector2Int.zero;
+                this.Type = WallPieceType.Point;
                 break;
         }
         
@@ -55,21 +65,22 @@ public struct WallPiece
 
 public class Wallbuilder : MonoBehaviour//Only enable while placing walls
 {
-    private Node selectedTile;
-    [SerializeField] Level grid;
-    private Vector3 mousePos;
-    private Camera camRef;
+    private Node _selectedTile;
+    Level _grid;
+    private Vector3 _mousePos;
+    private Camera _camRef;
     [SerializeField] private Transform tileSelectionHighlighterTransform;
     [SerializeField] private GameObject wallPrefab;//TODO some kind of 3D tileset, good luck future me
-    private Queue<WallPiece> PieceQueue = new();//most likely only 2  pieces long at most
-    private WallPiece heldPiece;//piece that the player is currently placing
+    private readonly Queue<WallPiece> _pieceQueue = new();//most likely only 2  pieces long at most
+    private WallPiece _heldPiece;//piece that the player is currently placing
     public int piecesPerRound = 15;
+    [FormerlySerializedAs("_pieceDisplay")]
     [Header("UI")] 
-    [SerializeField] Image _pieceDisplay;
+    [SerializeField] Image pieceDisplay;
     #region init and data
     private void Awake()
     {
-        camRef = Camera.main;
+        _camRef = Camera.main;
         GameManager.OnEnterWallMode += () =>
         {
             this.enabled = true;
@@ -84,10 +95,11 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
     //Not cleaning up on destroy, don't tell anyone
     private void OnEnable()
     {
+        _grid = LevelManager.Instance.LevelRef;
         PopulatePieceQueue();
-        heldPiece = PieceQueue.Dequeue();
-        SetPieceDisplay(heldPiece.type);
-        _pieceDisplay.enabled = true;
+        _heldPiece = _pieceQueue.Dequeue();
+        SetPieceDisplay(_heldPiece.Type);
+        pieceDisplay.enabled = true;
     }
 
     
@@ -96,32 +108,32 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
 
     private void OnDisable()
     {
-        PieceQueue.Clear();
+        _pieceQueue.Clear();
     }
 
     #endregion
 
     #region input
-    private RaycastHit hit;
-    private Vector2Int tileCoord;
+    private RaycastHit _hit;
+    private Vector2Int _tileCoord;
     void Update()
     {
         RaycastHit hit;
 
         // Old Basile Version
-        mousePos = Input.mousePosition;
-        Ray mouseRay = camRef.ScreenPointToRay(mousePos);
+        _mousePos = Input.mousePosition;
+        Ray mouseRay = _camRef.ScreenPointToRay(_mousePos);
         //selection
         if (Physics.Raycast(mouseRay, out hit))
         {
             
-            tileCoord = new Vector2Int(Mathf.FloorToInt(hit.point.x/grid.TileSize),Mathf.FloorToInt( hit.point.z/grid.TileSize));
-            if (tileCoord != selectedTile?.Position)
+            _tileCoord = new Vector2Int(Mathf.FloorToInt(hit.point.x/_grid.TileSize),Mathf.FloorToInt( hit.point.z/_grid.TileSize));
+            if (_tileCoord != _selectedTile?.Position)
             {
-                selectedTile = grid.Nodes[tileCoord.x, tileCoord.y];
+                _selectedTile = _grid.Nodes[_tileCoord.x, _tileCoord.y];
                 //TODO: selection highlight object
 
-                tileSelectionHighlighterTransform.position = new Vector3(selectedTile.Position.x*grid.TileSize,0f,selectedTile.Position.y*grid.TileSize);
+                tileSelectionHighlighterTransform.position = new Vector3(_selectedTile.Position.x*_grid.TileSize,0f,_selectedTile.Position.y*_grid.TileSize);
 
             }
             
@@ -130,34 +142,12 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
         {
             Debug.LogWarning("selected outside the terrain!");
         }
-
-        /* //Test Antoine version
-        //Capte la position de la souris
-        mousePos = Input.mousePosition;
-        // Rayon de la souris par rapport  la camra
-        Ray ray = camRef.ScreenPointToRay(mousePos);
-        // Cration d'une variable Raycast ncessaire pour le out de la fonction Raycast
-
-        //Si le raycast de la souris sur l'ecran est en contact avec un objet de layer "Structure"
-        if (Physics.Raycast(ray, out hit))
-        {
-            Debug.DrawRay(ray.origin, ray.direction * 100, Color.green);
-
-            selectedTile = GetNodeWithCoords(hit.collider.transform.position.x, hit.transform.position.z);
-
-            //TODO: selection highlight object
-            tileSelectionHighlighterTransform.position = new Vector3(selectedTile.Position.x * grid.TileSize, 0f, selectedTile.Position.y * grid.TileSize);
-        }
-        else
-        {
-            selectedTile = null;
-            return;
-        }*/
+        
 
         //confirm
         if (Input.GetMouseButtonDown(0))
         {
-            if (!CanConstructWallOn(selectedTile))
+            if (!CanConstructWallOn(_selectedTile))
             {
                 StopAllCoroutines();
                 StartCoroutine(HighlighterErrorFeedback());
@@ -166,38 +156,45 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
             //TODO: apply the whole tetris piece after checking the relevant tiles for eligibility 
             
             Instantiate(wallPrefab, tileSelectionHighlighterTransform.position, quaternion.identity);
-            selectedTile.StateNode = EnumStateNode.wall;
-            var targetPosition = new Vector2(selectedTile.Coord.x, selectedTile.Coord.y) * grid.TileSize;
-            var tileSize = grid.TileSize;
+            _selectedTile.StateNode = EnumStateNode.wall;
+            var tileSize = _grid.TileSize;
             var neutralHeight = 0f;//set it to max expected height if we reuse the ray-casting trick
 
-            for (int i = 0; i < heldPiece.tiles.Length; i++)
+            for (int i = 0; i < _heldPiece.Tiles.Length; i++)
             {
-                var currentWorkingTile = selectedTile.Coord + heldPiece.tiles[i];
+                var currentWorkingTile = _selectedTile.Coord + _heldPiece.Tiles[i];
                 Instantiate(standalone, new Vector3( currentWorkingTile.x * tileSize,neutralHeight,currentWorkingTile.y *tileSize), quaternion.identity);
-                grid.Nodes[currentWorkingTile.x, currentWorkingTile.y].StateNode = EnumStateNode.wall;
+                _grid.Nodes[currentWorkingTile.x, currentWorkingTile.y].StateNode = EnumStateNode.wall;
             }
 
-            heldPiece = PieceQueue.Dequeue();
-            SetPieceDisplay(heldPiece.type);
-            if (PieceQueue.Count == 0)
+            _heldPiece = _pieceQueue.Dequeue();
+            SetPieceDisplay(_heldPiece.Type);
+            if (_pieceQueue.Count == 0)
             {
-                GameManager.Instance.NextMode();
+                if(ZoneOfControl.Instance.CheckRampartAreValid())
+                {
+                    GameManager.Instance.NextMode();
+                }
+                else
+                {
+                    Debug.Log("GAME OVER");
+                    SceneManager.LoadScene(0);
+                }
             }
         }
         //rotate piece
         if (Input.GetMouseButtonDown(1))
         {
-            RotatePiece90Clockwise(ref heldPiece);
+            RotatePiece90Clockwise(ref _heldPiece);
         }
     }
     
     private bool CanConstructWallOn(Node selection)
     {
-        for (int i = 0; i < heldPiece.tiles.Length; i++)
+        for (int i = 0; i < _heldPiece.Tiles.Length; i++)
         {
-            var pieceTile = heldPiece.tiles[i];
-            var tile = grid.Nodes[selection.Coord.x + pieceTile.x, selection.Coord.y + pieceTile.y];
+            var pieceTile = _heldPiece.Tiles[i];
+            var tile = _grid.Nodes[selection.Coord.x + pieceTile.x, selection.Coord.y + pieceTile.y];
             if (tile.StateNode == EnumStateNode.water ||
                 tile.StateNode == EnumStateNode.tower ||
                 tile.StateNode == EnumStateNode.wall ||
@@ -215,10 +212,10 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
 
     internal void RotatePiece90Clockwise(ref WallPiece piece)//rotation around the 0,0 axis
     {
-        for (int i = 0; i < piece.tiles.Length; i++)
+        for (int i = 0; i < piece.Tiles.Length; i++)
         {
-            var value = piece.tiles[i];
-            piece.tiles[i] = new Vector2Int(value.y, -value.x);
+            var value = piece.Tiles[i];
+            piece.Tiles[i] = new Vector2Int(value.y, -value.x);
         }
     }
     #endregion
@@ -228,7 +225,7 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
     private WallPiece GetRandomPiece()
     {
         var typeSelect = Random.Range(0, 3);
-        WallPiece piece = new WallPiece((WallpieceType)typeSelect);
+        WallPiece piece = new WallPiece((WallPieceType)typeSelect);
         
         //TODO: add random rotation
         return piece;
@@ -237,32 +234,32 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
     {
         for (int i = 0; i < piecesPerRound; i++)//I'd normally do just a few at a time but this is less code
         {
-            PieceQueue.Enqueue(GetRandomPiece());
+            _pieceQueue.Enqueue(GetRandomPiece());
         }
     }
 
     [SerializeField] private Sprite pointSprite;
     [SerializeField] private Sprite cornerSprite;
     [SerializeField] private Sprite barSprite;
-    private void SetPieceDisplay(WallpieceType heldPieceType)
+    private void SetPieceDisplay(WallPieceType heldPieceType)
     {
         switch (heldPieceType)
         {
-            case WallpieceType.Point:
-                _pieceDisplay.sprite = pointSprite;
+            case WallPieceType.Point:
+                pieceDisplay.sprite = pointSprite;
                 break;
-            case WallpieceType.Corner:
-                _pieceDisplay.sprite = cornerSprite;
+            case WallPieceType.Corner:
+                pieceDisplay.sprite = cornerSprite;
                 break;
-            case WallpieceType.Bar:
-                _pieceDisplay.sprite = barSprite;
+            case WallPieceType.Bar:
+                pieceDisplay.sprite = barSprite;
                 break;
             default:
-                _pieceDisplay.sprite = null;
+                pieceDisplay.sprite = null;
                 break;
         }
 
-        _pieceDisplay.rectTransform.rotation = quaternion.identity;
+        pieceDisplay.rectTransform.rotation = quaternion.identity;
     }
     #region Tilesets
 
@@ -279,7 +276,7 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
         Down = 64,
         DownLeft = 128
     }
-
+    //TODO: replace by SO containing references to a sprite and a mesh
     [Header("wall prefabs")] 
     [SerializeField] private GameObject crossWall;
     [SerializeField] private GameObject cornerPath;
@@ -294,15 +291,15 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
     {
         
     }
-    //TODO: finish tileset rules
+    //TODO: finish tile set rules
     private void RunTileSetRules(WallPiece piece, Vector2Int origin)//gaze not unto the abyss lest it gazes back unto you
     {
-        for (int i = 0; i < piece.tiles.Length; i++)
+        for (int i = 0; i < piece.Tiles.Length; i++)
         {
-            var pieceTile = piece.tiles[i];
-            var targetCoordinates = new Vector2(origin.x + pieceTile.x, origin.y + pieceTile.y) * grid.TileSize;
+            var pieceTile = piece.Tiles[i];
+            var targetCoordinates = new Vector2(origin.x + pieceTile.x, origin.y + pieceTile.y) * _grid.TileSize;
             var flag = NeighboringWallsFlagCheck(origin);
-            //Cross case
+            //Cross case, easy as rotation doesn't matter
             if (flag == (NeighboringWalls.Down | NeighboringWalls.Up | NeighboringWalls.Left | NeighboringWalls.Right))
             {
 
@@ -311,7 +308,7 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
                 
             }
             //corner path
-            
+            //TODO: finish tileset rules
         }
         
     }
@@ -323,114 +320,47 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
 
     private NeighboringWalls NeighboringWallsFlagCheck(Vector2Int origin)
     {
-        NeighboringWalls flag = ((grid.Nodes[origin.x - 1, origin.y].StateNode == EnumStateNode.wall)
+        NeighboringWalls flag = ((_grid.Nodes[origin.x - 1, origin.y].StateNode == EnumStateNode.wall)
                                     ? NeighboringWalls.Left
                                     : NeighboringWalls.None) |
-                                ((grid.Nodes[origin.x - 1, origin.y + 1].StateNode == EnumStateNode.wall)
+                                ((_grid.Nodes[origin.x - 1, origin.y + 1].StateNode == EnumStateNode.wall)
                                     ? NeighboringWalls.UpLeft
                                     : NeighboringWalls.None) |
-                                ((grid.Nodes[origin.x, origin.y + 1].StateNode == EnumStateNode.wall)
+                                ((_grid.Nodes[origin.x, origin.y + 1].StateNode == EnumStateNode.wall)
                                     ? NeighboringWalls.Up
                                     : NeighboringWalls.None) |
-                                ((grid.Nodes[origin.x + 1, origin.y + 1].StateNode == EnumStateNode.wall)
+                                ((_grid.Nodes[origin.x + 1, origin.y + 1].StateNode == EnumStateNode.wall)
                                     ? NeighboringWalls.UpRight
                                     : NeighboringWalls.None) |
-                                ((grid.Nodes[origin.x + 1, origin.y].StateNode == EnumStateNode.wall)
+                                ((_grid.Nodes[origin.x + 1, origin.y].StateNode == EnumStateNode.wall)
                                     ? NeighboringWalls.Right
                                     : NeighboringWalls.None) |
-                                ((grid.Nodes[origin.x + 1, origin.y - 1].StateNode == EnumStateNode.wall)
+                                ((_grid.Nodes[origin.x + 1, origin.y - 1].StateNode == EnumStateNode.wall)
                                     ? NeighboringWalls.DownRight
                                     : NeighboringWalls.None) |
-                                ((grid.Nodes[origin.x, origin.y - 1].StateNode == EnumStateNode.wall)
+                                ((_grid.Nodes[origin.x, origin.y - 1].StateNode == EnumStateNode.wall)
                                     ? NeighboringWalls.Down
                                     : NeighboringWalls.None) |
-                                ((grid.Nodes[origin.x - 1, origin.y - 1].StateNode == EnumStateNode.wall)
+                                ((_grid.Nodes[origin.x - 1, origin.y - 1].StateNode == EnumStateNode.wall)
                                     ? NeighboringWalls.DownLeft
                                     : NeighboringWalls.None);
         return flag;
     }
 
     #endregion
-    
-    /////////////////////////////////////////// TEST VALID ZONE PATHFINDING ///////////////////////////////////
-    #region
-
-    private Node currentNode;
-    public Queue<Node> frontier;
-    private List<Node> came_from;
-    private Dictionary<Node, Node> wayDico;
-    private bool wayIsValid;
-
-    public bool CheckRampartAreValid()
+    #if UNITY_EDITOR
+    #region Debug
+    private readonly GUIStyle _guiStyle = new GUIStyle();
+    [SerializeField] private bool debugDisplay = false;
+    private void OnGUI()
     {
-        wayIsValid = true;
-        frontier = new Queue<Node>();
-        came_from = new List<Node>();
-        wayDico = new Dictionary<Node, Node>();
-
-        // 1,1 c'est la position free garantie
-        grid[1, 1].StateNode = EnumStateNode.castle;
-        frontier.Enqueue(grid[1,1]);
-        came_from.Add(grid[1, 1]);
-
-
-        while (frontier.Count != 0)
+        _guiStyle.fontSize = 32;
+        if (_selectedTile != null && debugDisplay)
         {
-            // On prend le premier node dans la Queue et on teste ses voisins
-            currentNode = frontier.Dequeue();
-            TestNeighbors(currentNode);
-            came_from.Add(currentNode);
-
-            // Et arr�ter si on a crois� un node water
-            if (!wayIsValid)
-            {
-                Debug.Log("Remparts mauvais");
-                return false;
-            }
-        }
-
-        Debug.Log("Toutes les tiles ont �t�s test�es et valides");
-        return true;
-    }
-
-    private void TestNeighbors(Node node)
-    {
-        // On teste les 4 voisins du node si ils existent
-        if (node.Coord.y + 1 < grid.Height)
-            TestNeighbor(grid.Nodes[node.Coord.x, node.Coord.y + 1]);
-        if (node.Coord.y - 1 >= 0)
-            TestNeighbor(grid.Nodes[node.Coord.x, node.Coord.y - 1]);
-        if (node.Coord.x + 1 < grid.Width)
-            TestNeighbor(grid.Nodes[node.Coord.x + 1, node.Coord.y]);
-        if (node.Coord.x - 1 >= 0)
-            TestNeighbor(grid.Nodes[node.Coord.x - 1, node.Coord.y]);
-    }
-
-    private void TestNeighbor(Node neighbor)
-    {
-        // Si diff�rent de l� o� on vient
-        for (int i = 0; i < came_from.Count; i++)
-        {
-            if (neighbor == came_from[i])
-                return;
-        }
-        // Et libre
-        if (neighbor.StateNode == EnumStateNode.buildable)
-        {
-            // On ajoute le node � la liste des trucs � g�rer
-            // Et on met dans le dico
-            if (!wayDico.ContainsKey(neighbor))
-            {
-                frontier.Enqueue(neighbor);
-                wayDico.Add(neighbor, currentNode);
-            }
-
-        }
-        else if(neighbor.StateNode == EnumStateNode.water)
-        {
-            wayIsValid = false;
+            GUILayout.Label($"selected Tile: {_selectedTile.Position}",_guiStyle);
         }
     }
 
     #endregion
+    #endif
 }

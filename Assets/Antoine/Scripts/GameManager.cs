@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum GameMode
@@ -25,52 +23,31 @@ public class GameManager : Singleton<GameManager>
     [Tooltip("Nombre de vague d'ennemi pour une époque")]
     public int roundByEra = 3;
 
-    public Camera cam;
 
     [SerializeField]
-    private GameMode gameMode = GameMode.TowerMode;
+    private GameMode gameMode = GameMode.TowerMode; public GameMode ActualGameMode => gameMode;
     [SerializeField]
     private Era actualEra;
 
-    public LayerMask mode2D;
-    public LayerMask mode3D;
-
-    private bool isMode2D;
-
-    public static Action OnEnterTowerMode;
-    public static Action OnExitTowerMode;
-    public static Action OnEnterWallMode;
-    public static Action OnExitWallMode;
-    public static Action OnEnterAttackMode;
-    public static Action OnExitAttackMode;
+    public static event Action OnEnterTowerMode;
+    public static event Action OnExitTowerMode;
+    public static event Action OnEnterWallMode;
+    public static event Action OnExitWallMode;
+    public static event Action OnEnterAttackMode;
+    public static event Action OnExitAttackMode;
 
     private void Start()
     {
         actualEra = Era.Roman;
-
+        //TODO: snap the camera to 2D with an instant version of the transition
         gameMode = GameMode.TowerMode;
         OnEnterTowerMode?.Invoke();
-
-        cam.cullingMask = mode2D;
-        isMode2D = true;
+        
     }
-
-    /// <summary>
-    /// FlipFlop le mode graphique
-    /// </summary>
-    public void ChangeGraphicMode()
-    {
-        if (isMode2D)
-        {
-            cam.cullingMask = mode3D;
-            isMode2D = false;
-        }
-        else
-        {
-            cam.cullingMask = mode2D;
-            isMode2D = true;
-        }
-    }
+    
+    
+    
+    
 
     /// <summary>
     /// Charge le mode de jeu suivant
@@ -81,8 +58,6 @@ public class GameManager : Singleton<GameManager>
         {
             case GameMode.TowerMode:
                 OnExitTowerMode?.Invoke();
-                // On passe en 3D
-                ChangeGraphicMode();
 
                 gameMode = GameMode.AttackMode;
 
@@ -105,14 +80,12 @@ public class GameManager : Singleton<GameManager>
                 {
                     round = 0;
                     NewEra();
-                    ChangeGraphicMode();
                     gameMode = GameMode.RampartMode;
 
                     OnEnterWallMode?.Invoke();
                 }
                 else
                 {
-                    ChangeGraphicMode();
                     gameMode = GameMode.RampartMode;
 
                     OnEnterWallMode?.Invoke();
@@ -124,7 +97,7 @@ public class GameManager : Singleton<GameManager>
                 break;
         }
 
-        Debug.Log(gameMode + ", round " + round) ;
+            //Debug.Log(gameMode + ", round " + round) ;
     }
 
     private void NewEra()
