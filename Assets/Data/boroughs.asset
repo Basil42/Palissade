@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 878d5975aa61ea74fb1bf772033354ac, type: 3}
   m_Name: boroughs
   m_EditorClassIdentifier: 
-  boroughPrefabs: []
+  boroughPrefabs:
+  - {fileID: 5962813813475449745, guid: c3ee380e18c0c034b842e268bdcecbb8, type: 3}
