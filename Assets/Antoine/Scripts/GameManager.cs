@@ -58,6 +58,7 @@ public class GameManager : Singleton<GameManager>
             {
                 yield return StartCoroutine(initialPhaseController.CastleSelection());
                 yield return StartCoroutine(initialPhaseController.InitialWallBuilding());
+                initialPhaseController.InitialZoneOfControl();
             }
             else
             {

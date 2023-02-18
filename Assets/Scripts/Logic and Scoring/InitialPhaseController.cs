@@ -6,9 +6,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class InitialPhaseController : MonoBehaviour
+public class InitialPhaseController : Singleton<InitialPhaseController>
 {
-    Node _selectedCastle = null;
+    public Node SelectedCastle { get; private set; } = null;
     private Level _levelRef;
 
     private void Start()
@@ -18,7 +18,7 @@ public class InitialPhaseController : MonoBehaviour
 
     internal IEnumerator CastleSelection()
     {
-        while (_selectedCastle == null)
+        while (SelectedCastle == null)
         {
             var selectedTile = TileSelector.SelectedTile;
 
@@ -26,7 +26,7 @@ public class InitialPhaseController : MonoBehaviour
             {
                 if (selectedTile is { StateNode: EnumStateNode.castle })
                 {
-                    _selectedCastle = selectedTile;
+                    SelectedCastle = selectedTile;
                     Debug.Log("selected Castle");
                 }
                 else
@@ -53,18 +53,18 @@ public class InitialPhaseController : MonoBehaviour
     {
         //i should just have used the builder and run the tileset rules automatically
         var waiter = new WaitForSeconds(wallBuildingTimeStep);
-        var castleCoord = _selectedCastle.Position;
+        var castleCoord = SelectedCastle.Position;
         //upper left corner
         
         Instantiate(
             cornerStartingWallPiece,
-            new Vector3((_selectedCastle.Position.x - initialZoneOfControlExtent.x) * _levelRef.TileSize,0f,(_selectedCastle.Position.y + initialZoneOfControlExtent.y) * _levelRef.TileSize),
+            new Vector3((SelectedCastle.Position.x - initialZoneOfControlExtent.x) * _levelRef.TileSize,0f,(SelectedCastle.Position.y + initialZoneOfControlExtent.y) * _levelRef.TileSize),
             quaternion.Euler(0f,0.5f * Mathf.PI * cornerRotationOffset,0f));
         yield return waiter;
         //upper path
         var startCoord = castleCoord.x - (initialZoneOfControlExtent.x - 1);
         var endCoord = castleCoord.x + (initialZoneOfControlExtent.x - 1);
-        var staticCoordValue = _selectedCastle.Position.y + initialZoneOfControlExtent.y;
+        var staticCoordValue = SelectedCastle.Position.y + initialZoneOfControlExtent.y;
         for (int x = startCoord; x <= endCoord; x++)
         {
             Instantiate(pathStartingWallPiece,
@@ -75,13 +75,13 @@ public class InitialPhaseController : MonoBehaviour
         //upper right corner
         Instantiate(
             cornerStartingWallPiece,
-            _levelRef.GetCenterWorldPosition(_selectedCastle.Position.x + initialZoneOfControlExtent.x,staticCoordValue),
+            _levelRef.GetCenterWorldPosition(SelectedCastle.Position.x + initialZoneOfControlExtent.x,staticCoordValue),
             quaternion.Euler(0f,0.5f * Mathf.PI  * (1 +cornerRotationOffset),0f));
         yield return waiter;
         //right path
         startCoord = castleCoord.y + (initialZoneOfControlExtent.y-1);
         endCoord = castleCoord.y - (initialZoneOfControlExtent.y-1);
-        staticCoordValue = _selectedCastle.Position.x + initialZoneOfControlExtent.x;
+        staticCoordValue = SelectedCastle.Position.x + initialZoneOfControlExtent.x;
         for (int y = startCoord; y >= endCoord; y--)
         {
             Instantiate(pathStartingWallPiece,
@@ -92,14 +92,14 @@ public class InitialPhaseController : MonoBehaviour
         //lower right corner
         Instantiate(
             cornerStartingWallPiece,
-            _levelRef.GetCenterWorldPosition(_selectedCastle.Position.x + initialZoneOfControlExtent.x,
-                _selectedCastle.Position.y - initialZoneOfControlExtent.y),
+            _levelRef.GetCenterWorldPosition(SelectedCastle.Position.x + initialZoneOfControlExtent.x,
+                SelectedCastle.Position.y - initialZoneOfControlExtent.y),
             quaternion.Euler(0f, 0.5f * Mathf.PI  * (2 + cornerRotationOffset), 0f));
         yield return waiter;
         //lower path
         startCoord = castleCoord.x + (initialZoneOfControlExtent.x - 1);
         endCoord = castleCoord.x - (initialZoneOfControlExtent.x - 1);
-        staticCoordValue = _selectedCastle.Position.y - initialZoneOfControlExtent.y;
+        staticCoordValue = SelectedCastle.Position.y - initialZoneOfControlExtent.y;
         for (int x = startCoord; x >= endCoord; x--)
         {
             Instantiate(
@@ -126,11 +126,9 @@ public class InitialPhaseController : MonoBehaviour
         }
     }
 
-    internal IEnumerator InitialZoneOfControl()
+    internal void InitialZoneOfControl()
     {
-        //wait on an animation for the zone of control, make this a void method if the animation should be waited on in the game manager
-        //call on external zone of control method
-        yield return null; //wait on animation
+        ZoneOfControl.Instance.CheckRampartAreValid(SelectedCastle);
     }
     
     

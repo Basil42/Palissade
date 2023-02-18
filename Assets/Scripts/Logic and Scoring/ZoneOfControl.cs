@@ -1,5 +1,8 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ZoneOfControl : Singleton<ZoneOfControl>
 {
@@ -11,12 +14,15 @@ public class ZoneOfControl : Singleton<ZoneOfControl>
     private Dictionary<Node, Node> _wayDico;
     private bool _wayIsValid;
     private Level _grid;
+
+    
+
     private void Start()
     {
         _grid = LevelManager.Instance.LevelRef;
     }
 
-    public bool CheckRampartAreValid()
+    public bool CheckRampartAreValid(Node castleNode)
     {
         _wayIsValid = true;
         Frontier = new Queue<Node>();
@@ -87,5 +93,24 @@ public class ZoneOfControl : Singleton<ZoneOfControl>
         }
     }
 
+    
+
+    [Header("Animation")] [SerializeField] private float zoneOfControlAnimationStep = 0.3f;
+    [SerializeField] private BoroughCollection boroughPrefabs; 
+    internal IEnumerator ZoneOfControlAnimationRoutine()
+    {
+        var waiter = new WaitForSeconds(zoneOfControlAnimationStep);
+        foreach (var node in _wayDico)
+        {
+            node.Key.NodeController = EnumNodeControl.playerControlled;//not great to do it here, but gotta go fast
+            if (node.Key.StateNode == EnumStateNode.buildable)
+            {
+                var randomPrefabIndex = Random.Range(0, boroughPrefabs.boroughPrefabs.Count);
+                LevelManager.Instance.Construct(node.Key,boroughPrefabs.boroughPrefabs[randomPrefabIndex]);
+            }
+
+            yield return waiter;
+        }
+    }
     #endregion
 }

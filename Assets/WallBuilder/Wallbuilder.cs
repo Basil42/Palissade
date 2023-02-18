@@ -120,17 +120,17 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
     private Vector2Int _tileCoord;
     void Update()
     {
-        var _selectedTile = TileSelector.SelectedTile;
-        if (_tileCoord != TileSelector.SelectedTile?.Position && _selectedTile != null)
+        var selectedTile = TileSelector.SelectedTile;
+        if (_tileCoord != TileSelector.SelectedTile?.Position && selectedTile != null)
         {
-            _tileCoord = _selectedTile.Position;
-            tileSelectionHighlighterTransform.position = new Vector3( _selectedTile.Position.x*_grid.TileSize,0f,_selectedTile.Position.y*_grid.TileSize);
+            _tileCoord = selectedTile.Position;
+            tileSelectionHighlighterTransform.position = new Vector3( selectedTile.Position.x*_grid.TileSize,0f,selectedTile.Position.y*_grid.TileSize);
 
         }
         //confirm
         if (Input.GetMouseButtonDown(0))
         {
-            if (!CanConstructWallOn(_selectedTile))
+            if (selectedTile == null || !CanConstructWallOn(selectedTile))
             {
                 StopAllCoroutines();
                 StartCoroutine(HighlighterErrorFeedback());
@@ -139,13 +139,13 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
             //TODO: apply the whole tetris piece after checking the relevant tiles for eligibility 
             
             Instantiate(wallPrefab, tileSelectionHighlighterTransform.position, quaternion.identity);
-            _selectedTile.StateNode = EnumStateNode.wall;
+            selectedTile.StateNode = EnumStateNode.wall;
             var tileSize = _grid.TileSize;
             var neutralHeight = 0f;//set it to max expected height if we reuse the ray-casting trick
 
             for (int i = 0; i < _heldPiece.Tiles.Length; i++)
             {
-                var currentWorkingTile = _selectedTile.Coord + _heldPiece.Tiles[i];
+                var currentWorkingTile = selectedTile.Coord + _heldPiece.Tiles[i];
                 Instantiate(standalone, new Vector3( currentWorkingTile.x * tileSize,neutralHeight,currentWorkingTile.y *tileSize), quaternion.identity);
                 _grid.Nodes[currentWorkingTile.x, currentWorkingTile.y].StateNode = EnumStateNode.wall;
             }
@@ -154,7 +154,7 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
             SetPieceDisplay(_heldPiece.Type);
             if (_pieceQueue.Count == 0)
             {
-                if(ZoneOfControl.Instance.CheckRampartAreValid())
+                if(ZoneOfControl.Instance.CheckRampartAreValid(InitialPhaseController.Instance.SelectedCastle))
                 {
                     GameManager.Instance.NextMode();
                 }
@@ -171,6 +171,7 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
             RotatePiece90Clockwise(ref _heldPiece);
         }
     }
+
     
     private bool CanConstructWallOn(Node selection)
     {

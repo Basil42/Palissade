@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -6,7 +7,7 @@ using UnityEngine;
 public class TowerBuilder : Singleton<TowerBuilder>
 {
     private Node SelectedTile;
-    [SerializeField] Level grid;
+    Level grid;
     private Camera camRef;
     private Vector3 mousePos;
     [SerializeField] private Transform tileSelectionHighlighterTransform;
@@ -19,7 +20,7 @@ public class TowerBuilder : Singleton<TowerBuilder>
     private void Awake()
     {
         camRef = Camera.main;
-
+    
         GameManager.OnEnterTowerMode += () =>
         {
             this.enabled = true;
@@ -30,6 +31,11 @@ public class TowerBuilder : Singleton<TowerBuilder>
             this.enabled = false;
             Debug.Log("Tower mode stop");
         };
+    }
+
+    private void Start()
+    {
+        grid = LevelManager.Instance.LevelRef;
     }
 
     private RaycastHit hit;
@@ -49,7 +55,6 @@ public class TowerBuilder : Singleton<TowerBuilder>
                 SelectedTile = grid.Nodes[tileCoord.x, tileCoord.y];
                 //TODO: selection highlight object
                 tileSelectionHighlighterTransform.position = new Vector3(SelectedTile.Position.x * grid.TileSize, 0f, SelectedTile.Position.y * grid.TileSize);
-                    //Debug.Log(hit.point);//TODO: Remove logs
             }
 
         }

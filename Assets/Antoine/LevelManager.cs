@@ -54,4 +54,12 @@ public class LevelManager : Singleton<LevelManager>
             }
         }
     }
+
+    internal void Construct(Node target, GameObject prefab)
+    {
+        var targetPosition =
+            new Vector3(target.Position.x * levelRef.TileSize, 0f, target.Position.y * levelRef.TileSize);
+        var constructedObject = Instantiate(prefab, targetPosition, Quaternion.identity);
+        target.SetConstruct(constructedObject);
+    }
 }

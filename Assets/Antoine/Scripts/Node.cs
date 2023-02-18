@@ -19,6 +19,7 @@ public class Node
     /// </summary>
     private EnumStateNode _stateNode = EnumStateNode.buildable;
 
+    public GameObject ConstructedGo { get; private set; } = null;
     private EnumNodeControl _nodeControl = EnumNodeControl.none;
     #endregion
 
@@ -45,6 +46,13 @@ public class Node
     {
         get { return _nodeControl; }
         set { _nodeControl = value; }
+    }
+    
+    //construct
+    public void SetConstruct(GameObject construct)//sadly can't instantiate the prefab here
+    {
+        if(ConstructedGo != null) Object.Destroy(ConstructedGo);
+        ConstructedGo = construct;
     }
     #endregion
 }
