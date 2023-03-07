@@ -29,14 +29,14 @@ public class TileTypeMapper : MonoBehaviour
     private void VisualizeMapTypes()
     {
         var jsonString = File.ReadAllText(Application.dataPath + "/tileTypes.txt");
-        var TypeMap = JsonConvert.DeserializeObject<EnumStateNode[][]>(jsonString);
+        var typeMap = JsonConvert.DeserializeObject<EnumStateNode[][]>(jsonString);
         var mapDimension = new Vector2Int(LevelManager.Instance.LevelRef.Width, LevelManager.Instance.LevelRef.Height);
         Texture2D visTexture = new Texture2D(mapDimension.x, mapDimension.y);
         for (int x = 0; x < mapDimension.x; x++)
         {
             for (int y = 0; y < mapDimension.y; y++)
             {
-                visTexture.SetPixel(x,y,TypeMap[x][y] == EnumStateNode.buildable ? Color.green : Color.blue);
+                visTexture.SetPixel(x,y,typeMap[x][y] == EnumStateNode.buildable ? Color.green : Color.blue);
             }
         }
         visTexture.Apply();

@@ -959,6 +959,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seaLevel: 4
+  visualizer: {fileID: 0}
 --- !u!4 &2067912168
 Transform:
   m_ObjectHideFlags: 0
@@ -1050,6 +1051,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3093805440884077504, guid: 29d81c6c704c03643a2877b4a54f3815,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3093805440884077504, guid: 29d81c6c704c03643a2877b4a54f3815,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 981b2906b4484da4189248dcc8a1a7b8, type: 2}
+    - target: {fileID: 3093805440884077504, guid: 29d81c6c704c03643a2877b4a54f3815,
+        type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: 72f563ca7ac007345a92be7c82e69339, type: 2}
     - target: {fileID: 4864627383147188208, guid: 29d81c6c704c03643a2877b4a54f3815,
         type: 3}
       propertyPath: m_RootOrder

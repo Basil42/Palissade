@@ -60,8 +60,8 @@ public class InitialPhaseController : Singleton<InitialPhaseController>
         var targetNode = _levelRef.Nodes[targetNodeCoord.x, targetNodeCoord.y];
         targetNode.SetConstruct( 
             Instantiate(
-                cornerStartingWallPiece,
-                new Vector3(targetNodeCoord.x * _levelRef.TileSize,0f,targetNodeCoord.y * _levelRef.TileSize),
+                cornerStartingWallPiece, 
+                _levelRef.GetCenterWorldPosition(targetNodeCoord),
                 quaternion.Euler(0f,0.5f * Mathf.PI * cornerRotationOffset,0f)
                 )
             );
