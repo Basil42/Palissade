@@ -30,9 +30,9 @@ public class ZoneOfControl : Singleton<ZoneOfControl>
         _wayDico = new Dictionary<Node, Node>();
 
         // 22,22 c'est la position devant le chateau
-        _grid[22, 22].StateNode = EnumStateNode.castle;
-        Frontier.Enqueue(_grid[1,1]);
-        _cameFrom.Add(_grid[1, 1]);
+        // _grid[22, 22].StateNode = EnumStateNode.castle;
+        Frontier.Enqueue(castleNode);
+        _cameFrom.Add(castleNode);
 
 
         while (Frontier.Count != 0)

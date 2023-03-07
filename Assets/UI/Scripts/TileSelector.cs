@@ -40,7 +40,7 @@ public class TileSelector : Singleton<TileSelector>
             Vector2Int tileCoordinates = new Vector2Int(
                 Mathf.FloorToInt(_hit.point.x / tileSize),
                 Mathf.FloorToInt(_hit.point.z / tileSize));
-            tileCoordinates.Clamp(Vector2Int.zero,new Vector2Int(levelRef.Width,levelRef.Height));
+            tileCoordinates.Clamp(Vector2Int.zero,new Vector2Int(levelRef.Width-1,levelRef.Height-1));
             if (tileCoordinates != _selectedTile?.Position)
             {
                 try

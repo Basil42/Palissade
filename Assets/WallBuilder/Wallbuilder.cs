@@ -80,12 +80,16 @@ public class Wallbuilder : MonoBehaviour//Only enable while placing walls
         GameManager.OnEnterWallMode += () =>
         {
             this.enabled = true;
+            #if UNITY_EDITOR
             Debug.Log("Wall mode");
+            #endif
         };
         GameManager.OnExitWallMode += () =>
         {
             this.enabled = false;
+            #if UNITY_EDITOR
             Debug.Log("Wall mode stop");
+            #endif
         };
     }
 

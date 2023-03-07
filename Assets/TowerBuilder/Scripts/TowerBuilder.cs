@@ -39,28 +39,16 @@ public class TowerBuilder : Singleton<TowerBuilder>
     }
 
     private RaycastHit hit;
-    private Vector2Int tileCoord;
+    private Vector2Int _tileCoord;
 
     void Update()
     {
-        mousePos = Input.mousePosition;
-        Ray mouseRay = camRef.ScreenPointToRay(mousePos);
-        //selection
-        if (Physics.Raycast(mouseRay, out hit))
+        var selectedTile = TileSelector.SelectedTile;
+        if (_tileCoord != TileSelector.SelectedTile?.Position && selectedTile != null)
         {
+            _tileCoord = selectedTile.Position;
+            tileSelectionHighlighterTransform.position = new Vector3( selectedTile.Position.x*grid.TileSize,0f,selectedTile.Position.y*grid.TileSize);
 
-            tileCoord = new Vector2Int(Mathf.FloorToInt(hit.point.x / grid.TileSize), Mathf.FloorToInt(hit.point.z / grid.TileSize));
-            if (tileCoord != SelectedTile?.Position)
-            {
-                SelectedTile = grid.Nodes[tileCoord.x, tileCoord.y];
-                //TODO: selection highlight object
-                tileSelectionHighlighterTransform.position = new Vector3(SelectedTile.Position.x * grid.TileSize, 0f, SelectedTile.Position.y * grid.TileSize);
-            }
-
-        }
-        else
-        {
-            Debug.LogWarning("selected outside the terrain!");
         }
         //confirm
         if (Input.GetMouseButtonDown(0))

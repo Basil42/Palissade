@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dee37f80663155e479b326ceb3648276, type: 3}
   m_Name: BaseLevel
   m_EditorClassIdentifier: 
-  _width: 80
-  _height: 80
+  _width: 70
+  _height: 60
   _tileSize: 10
+  tileTypeJson: {fileID: 4900000, guid: dc39fcbd21c127348971ab4d74ec58d4, type: 3}

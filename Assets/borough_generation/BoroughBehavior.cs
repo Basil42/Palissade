@@ -16,10 +16,14 @@ namespace borough_generation
             {
                 var elementTrans = elements[i].transform;
 
-                if (Physics.Raycast(elementTrans.position, Vector3.down, out hit))//TODO: multiple ray cast to average the normal so "cliff houses" don't fuck up too hard
+                if (Physics.Raycast(elementTrans.position + Vector3.up *20.0f, Vector3.down, out hit))//TODO: multiple ray cast to average the normal so "cliff houses" don't fuck up too hard
                 {
                     elementTrans.position = hit.point + new Vector3(0f,elements[i].GetComponent<MeshRenderer>().bounds.extents.y,0f);//not ideal but okay
                         //elementTrans.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+                }
+                else
+                {
+                    Debug.LogWarning("no ground detected");
                 }
                 
             }
