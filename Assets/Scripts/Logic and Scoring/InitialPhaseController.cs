@@ -31,7 +31,7 @@ public class InitialPhaseController : Singleton<InitialPhaseController>
                 }
                 else
                 {
-                    Debug.Log("Not a castle tile.");
+                    Debug.Log("Not a castle tile. TODO: visual feedback");
                     //TODO: visual error feedback (like a red flash on the tile or something)
                 }
             }
@@ -76,7 +76,7 @@ public class InitialPhaseController : Singleton<InitialPhaseController>
             targetNodeCoord = new Vector2Int(x, staticCoordValue);
             targetNode = _levelRef.Nodes[targetNodeCoord.x, targetNodeCoord.y];
             targetNode.SetConstruct(Instantiate(pathStartingWallPiece,
-                _levelRef.GetOffsetWorldPosition(targetNodeCoord),
+                _levelRef.GetCenterWorldPosition(targetNodeCoord),
                     quaternion.Euler(0f, 0.5f * Mathf.PI  * pathRotationOffset, 0f)));
             targetNode.StateNode = EnumStateNode.wall;
             yield return waiter;
@@ -86,7 +86,7 @@ public class InitialPhaseController : Singleton<InitialPhaseController>
         targetNode = _levelRef.Nodes[targetNodeCoord.x, targetNodeCoord.y];
         targetNode.SetConstruct( Instantiate(
             cornerStartingWallPiece,
-            _levelRef.GetOffsetWorldPosition(targetNodeCoord),
+            _levelRef.GetCenterWorldPosition(targetNodeCoord),
             quaternion.Euler(0f,0.5f * Mathf.PI  * (1 +cornerRotationOffset),0f)));
         targetNode.StateNode = EnumStateNode.wall;
         yield return waiter;
@@ -99,7 +99,7 @@ public class InitialPhaseController : Singleton<InitialPhaseController>
             targetNodeCoord = new Vector2Int(staticCoordValue, y);
             targetNode = _levelRef.Nodes[targetNodeCoord.x, targetNodeCoord.y];
             targetNode.SetConstruct( Instantiate(pathStartingWallPiece,
-                _levelRef.GetOffsetWorldPosition(targetNodeCoord),
+                _levelRef.GetCenterWorldPosition(targetNodeCoord),
                 quaternion.Euler(0f, 0.5f * Mathf.PI  * (pathRotationOffset + 1), 0f)));
             targetNode.StateNode = EnumStateNode.wall;
             yield return waiter;
@@ -110,7 +110,7 @@ public class InitialPhaseController : Singleton<InitialPhaseController>
         targetNode = _levelRef.Nodes[targetNodeCoord.x, targetNodeCoord.y];
         targetNode.SetConstruct( Instantiate(
             cornerStartingWallPiece,
-            _levelRef.GetOffsetWorldPosition(targetNodeCoord),
+            _levelRef.GetCenterWorldPosition(targetNodeCoord),
             quaternion.Euler(0f, 0.5f * Mathf.PI  * (2 + cornerRotationOffset), 0f)));
         targetNode.StateNode = EnumStateNode.wall;
         yield return waiter;
@@ -124,7 +124,7 @@ public class InitialPhaseController : Singleton<InitialPhaseController>
             targetNode = _levelRef.Nodes[targetNodeCoord.x, targetNodeCoord.y];
             targetNode.SetConstruct( Instantiate(
                 pathStartingWallPiece,
-                _levelRef.GetOffsetWorldPosition(targetNodeCoord),
+                _levelRef.GetCenterWorldPosition(targetNodeCoord),
                 quaternion.Euler(0f, 0.5f * Mathf.PI  * (pathRotationOffset), 0f)));
             targetNode.StateNode = EnumStateNode.wall;
             yield return waiter;
@@ -133,7 +133,7 @@ public class InitialPhaseController : Singleton<InitialPhaseController>
         targetNodeCoord = castleCoord - initialZoneOfControlExtent;
         targetNode = _levelRef.Nodes[targetNodeCoord.x, targetNodeCoord.y];
         targetNode.SetConstruct( Instantiate(cornerStartingWallPiece,
-            _levelRef.GetOffsetWorldPosition(targetNodeCoord),
+            _levelRef.GetCenterWorldPosition(targetNodeCoord),
             quaternion.Euler(0f, 0.5f * Mathf.PI  * (3 + cornerRotationOffset), 0f)));
         targetNode.StateNode = EnumStateNode.wall;
         yield return waiter;
@@ -146,7 +146,7 @@ public class InitialPhaseController : Singleton<InitialPhaseController>
             targetNodeCoord = new Vector2Int(staticCoordValue, y);
             targetNode = _levelRef.Nodes[targetNodeCoord.x, targetNodeCoord.y];
              targetNode.SetConstruct( Instantiate(pathStartingWallPiece,
-                _levelRef.GetOffsetWorldPosition(targetNodeCoord),
+                _levelRef.GetCenterWorldPosition(targetNodeCoord),
                 quaternion.Euler(0f, 0.5f * Mathf.PI  * (1+ pathRotationOffset), 0f)));
              targetNode.StateNode = EnumStateNode.wall;
             yield return waiter;
