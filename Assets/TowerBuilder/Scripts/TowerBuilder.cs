@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class TowerBuilder : Singleton<TowerBuilder>
 {
-    private Node SelectedTile;
     Level grid;
     private Camera camRef;
     private Vector3 mousePos;
@@ -15,7 +14,7 @@ public class TowerBuilder : Singleton<TowerBuilder>
     public int towerNumber = 2;
     private int towerCounter = 0;
 
-    [SerializeField] private GameObject towerPrefab;//TODO some kind of 3D tileset, good luck future me
+    [SerializeField] private GameObject towerPrefab;
 
     private void Awake()
     {
@@ -53,17 +52,18 @@ public class TowerBuilder : Singleton<TowerBuilder>
         //confirm
         if (Input.GetMouseButtonDown(0))
         {
+            
             //TODO: check all tile covered by the piece
-            if (CanConstructWallOn(SelectedTile))
+            if (!CanConstructTowerOn(selectedTile))
             {
+                Debug.Log("invalid tile to place a tower");
                 StopAllCoroutines();
                 StartCoroutine(HighlighterErrorFeedback());
                 return;
             }
-            //TODO: apply the whole tetris piece after checking the relevant tiles for eligibility 
 
             Instantiate(towerPrefab, tileSelectionHighlighterTransform.position, quaternion.identity);
-            SelectedTile.StateNode = EnumStateNode.tower;
+            selectedTile.StateNode = EnumStateNode.tower;
             towerCounter++;
                 //Debug.Log(towerCounter + " tour placée");
 
@@ -75,12 +75,11 @@ public class TowerBuilder : Singleton<TowerBuilder>
         }
     }
 
-    private bool CanConstructWallOn(Node tile)
+    private bool CanConstructTowerOn(Node tile)
     {
-        return tile.StateNode == EnumStateNode.water ||
-               tile.StateNode == EnumStateNode.tower ||
-               tile.StateNode == EnumStateNode.wall ||
-               tile.StateNode == EnumStateNode.castle;
+        return tile.NodeController == EnumNodeControl.playerControlled && 
+               tile.StateNode != EnumStateNode.tower &&
+               tile.StateNode != EnumStateNode.castle;
     }
 
     private IEnumerator HighlighterErrorFeedback()
