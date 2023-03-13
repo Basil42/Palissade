@@ -39,10 +39,10 @@ public class WaveManager : Singleton<WaveManager>
 
     private void OnEnable()
     {
-        LunchWave();
+        LaunchWave();
     }
 
-    public void LunchWave()
+    public void LaunchWave()
     {
         List<Transform> spawnsFree = new List<Transform>(spawShips);
 
