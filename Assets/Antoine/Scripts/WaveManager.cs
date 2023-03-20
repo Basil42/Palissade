@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class WaveManager : Singleton<WaveManager>
 {
@@ -16,13 +18,14 @@ public class WaveManager : Singleton<WaveManager>
     public bool _waveInProgress;
 
     [SerializeField, Tooltip("Points d'apparitions des navires")]
-    private Transform[] spawShips;
+    private Vector2Int[] spawShips;
 
     [SerializeField, Tooltip("Destinations des navires")]
-    private Transform[] destinationsShips;
+    private Vector2Int[] destinationsShips;
 
     public List<ShipBehavior> shipsList = new List<ShipBehavior>();
 
+    
     private void Awake()
     {
         GameManager.OnEnterAttackMode += () =>
@@ -37,39 +40,50 @@ public class WaveManager : Singleton<WaveManager>
         };
     }
 
+    private Level LevelRef;
     private void OnEnable()
     {
+        LevelRef = LevelManager.Instance.LevelRef;
         LaunchWave();
+        
     }
 
     public void LaunchWave()
     {
-        List<Transform> spawnsFree = new List<Transform>(spawShips);
-
-        int ships = CalculHowManyShips();
-        for (int i = 0; i < ships; i++)
+        try
         {
-            // On prend un spawn aléatoire de la liste
-            Transform t = spawnsFree[Random.Range(0, spawnsFree.Count)];
-            // On instancie le bateau
-            GameObject ship = Instantiate(ennemiPrefab, t.position, t.rotation);
-            // On l'enlève de la liste
-            spawnsFree.Remove(t);
+            List<Vector2Int> spawnsFree = new List<Vector2Int>(spawShips);//TODO: replace transform reference by an IntVector
 
-            // On donne au bateau une destination
-            ship.GetComponent<ShipBehavior>().destination = destinationsShips[Random.Range(0, destinationsShips.Length)];
+            int ships = CalculHowManyShips();
+            for (int i = 0; i < ships; i++)
+            {
+                // On prend un spawn aléatoire de la liste
+                Vector2Int SpawnCoord = spawnsFree[Random.Range(0, spawnsFree.Count)];//TODO: fallback behavior if this list is empty
+                // On instancie le bateau
+                GameObject ship = Instantiate(ennemiPrefab, LevelRef.GetCenterWorldPosition(SpawnCoord),Quaternion.identity);//TODO: leave the ship orient itself on instantiation
+                // On l'enlève de la liste
+                spawnsFree.Remove(SpawnCoord);
 
-            // On ajoute le bateau � la liste des bateaux acitfs
-            shipsList.Add(ship.GetComponent<ShipBehavior>());
+                // On donne au bateau une destination
+                ship.GetComponent<ShipBehavior>().destination = LevelRef.GetCenterWorldPosition(destinationsShips[Random.Range(0, destinationsShips.Length)]);
+
+                // On ajoute le bateau � la liste des bateaux acitfs
+                shipsList.Add(ship.GetComponent<ShipBehavior>());
+            }
+
+            _waveInProgress = true;
+            _timer = 0;
         }
-
-        _waveInProgress = true;
-        _timer = 0;
+        catch (IndexOutOfRangeException e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     private int CalculHowManyShips()
     {
-        int ships = 3 + GameManager.Instance.round;
+        int ships = 3 + GameManager.Instance.round;//TODO: fix this
         return ships;
     }
 

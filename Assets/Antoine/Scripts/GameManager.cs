@@ -117,7 +117,7 @@ public class GameManager : Singleton<GameManager>
                 break;
 
             default:
-                Debug.Log("ERREUR, MODE DE JEU INCORRECT");
+                Debug.Log($"ERREUR, MODE DE JEU INCORRECT : {gameMode.ToString()}");
                 break;
         }
 

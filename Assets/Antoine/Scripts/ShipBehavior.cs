@@ -8,7 +8,7 @@ public class ShipBehavior : MonoBehaviour
 
     public bool isDestroyed = false;
 
-    public Transform destination;
+    public Vector3 destination;
 
     private GameObject target;
 
@@ -34,7 +34,7 @@ public class ShipBehavior : MonoBehaviour
     private void Update()
     {
         // Le bateau avance vers sa destination
-        Vector3 dir = destination.position - transform.position;
+        Vector3 dir = destination - transform.position;
         transform.Translate(dir.normalized * speed * Time.deltaTime, Space.World);
 
         //Attaque
@@ -71,7 +71,7 @@ public class ShipBehavior : MonoBehaviour
         }
         else
         {
-            Debug.Log("Pas de muraille détectée");
+            Debug.Log("Pas de muraille dÃ©tectÃ©e");
         }
     }
 
