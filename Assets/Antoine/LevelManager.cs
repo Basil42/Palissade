@@ -14,7 +14,7 @@ public class LevelManager : Singleton<LevelManager>
 
         foreach (Vector2Int position in castlesPositions)
         {
-            Instantiate(castle, levelRef.GetOffsetWorldPosition(position),Quaternion.identity);
+            Instantiate(castle, levelRef.GetCenterWorldPosition(position),Quaternion.identity);
             levelRef.Nodes[position.x, position.y].StateNode = EnumStateNode.castle;
         }
     }

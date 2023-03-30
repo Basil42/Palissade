@@ -111,10 +111,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10448a00c9796024a8c8b1db5b4acb6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 7002183676487954265, guid: c451cb6fa8400c0438820727022a2930,
-    type: 3}
+  projectilePrefab: {fileID: 1188552210, guid: 184a7c3ef07c91946869a49717e622b2, type: 3}
   isDestroyed: 0
-  destination: {fileID: 0}
+  destination: {x: 0, y: 0, z: 0}
   speed: 1
   life: 5
   speedAttack: 1

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ShipBehavior : MonoBehaviour
 {
-    public GameObject projectilePrefab;
+    public ProjectileBasic projectilePrefab;
 
     public bool isDestroyed = false;
 
@@ -65,8 +65,8 @@ public class ShipBehavior : MonoBehaviour
         if(targets.Count > 0 )
         {
             Vector3 target = targets[Random.Range(0, targets.Count)];
-            GameObject projectile = Instantiate(projectilePrefab, transform.position, transform.rotation);
-            projectile.GetComponent<ProjectileBasic>().mDestPos = target;
+            ProjectileBasic projectile = Instantiate(projectilePrefab, transform.position, transform.rotation);
+            projectile.mDestPos = target;
             Debug.Log("Shoot to " + target.x +" " + target.z);
         }
         else
