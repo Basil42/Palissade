@@ -35,7 +35,7 @@ public class ShipBehavior : MonoBehaviour
     {
         // Le bateau avance vers sa destination
         Vector3 dir = destination - transform.position;
-        transform.Translate(dir.normalized * speed * Time.deltaTime, Space.World);
+        transform.Translate(dir.normalized * (speed * Time.deltaTime), Space.World);
 
         //Attaque
         _timerAttack += Time.deltaTime;
@@ -43,6 +43,11 @@ public class ShipBehavior : MonoBehaviour
         {
             ShipAttack();
             _timerAttack = 0;
+        }
+
+        if (dir.magnitude < 0.1f)
+        {
+            
         }
     }
 

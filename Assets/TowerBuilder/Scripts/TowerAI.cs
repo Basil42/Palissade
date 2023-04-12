@@ -29,9 +29,15 @@ public class TowerAI : TowerBasic
             //SortEnemy();
             Vector3 m = transform.position;
             m += Vector3.up * 2.0f;
-            ProjectileBehaviour ball = (ProjectileBehaviour)Instantiate(mProjectile, m, transform.rotation);
-            ball.mEnemy = target;
+            ProjectileBasic ball = Instantiate(mProjectile, m, transform.rotation);
+            ball.mDestPos = ComputeDestination(target);
         }
+    }
+
+    private Vector3 ComputeDestination(ShipBehavior shipBehavior)
+    {
+        var targetPos = target.transform.position;
+        return targetPos + (target.destination - targetPos) * (target.speed * mProjectile.mFlyTimer);//misses on ship that are almost to their destination, should be ok
     }
 
     void Update()

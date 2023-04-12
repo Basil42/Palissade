@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 
+//TODO: allow the game to create instances of the sprite material without breaking the transitions
 public class MapTransitions : MonoBehaviour
 {
     

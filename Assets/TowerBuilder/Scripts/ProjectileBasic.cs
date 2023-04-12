@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ProjectileBasic : MonoBehaviour
 {
     [Min(1)] public int damage = 2;
     public float mSpeed;
     public float mTime;
-    public float mDeltaTime;
+    [FormerlySerializedAs("mDeltaTime")] public float mFlyTimer;
     public Vector3 mInitPos;
     public Vector3 mDestPos;
     public AnimationCurve mAnimationCurve;
@@ -15,12 +16,12 @@ public class ProjectileBasic : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         m_ObjectCollider = GetComponent<Collider>();
         mInitPos = gameObject.transform.position;
         m_ObjectCollider = GetComponent<Collider>();
-        mDeltaTime = 0;
+        mFlyTimer = 0;
         
     }
     private void OnTriggerEnter(Collider other)
@@ -31,19 +32,19 @@ public class ProjectileBasic : MonoBehaviour
         }
     }
 
-    public void Fly()
+    protected virtual void Fly()
     {
-        float lerpFactor = mDeltaTime / mTime;
+        float lerpFactor = mFlyTimer / mTime;
 
         Vector3 pos = Vector3.Lerp(mInitPos, mDestPos, lerpFactor);// 
         transform.position = pos;
         transform.position = new Vector3(transform.position.x, mAnimationCurve.Evaluate(lerpFactor) * 4, transform.position.z);
 
-        mDeltaTime += Time.deltaTime;
+        mFlyTimer += Time.deltaTime;
     }
     void Update()
     {
-        if (mDeltaTime < mTime)
+        if (mFlyTimer < mTime)
         {
             Fly();
         }

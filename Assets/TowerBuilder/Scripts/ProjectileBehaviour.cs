@@ -1,37 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
 public class ProjectileBehaviour : ProjectileBasic
 {
-    public Vector3 mEnemyInitPos;
-
-    public ShipBehavior mEnemy;
-
-    void Start()
+//TODO target a position rather than an entity that could be destroyed
+    protected override void Fly()
     {
-        m_ObjectCollider = GetComponent<Collider>();
-        mInitPos = gameObject.transform.position;
-        mEnemyInitPos = mEnemy.transform.position;
-        //mDestPos = (Vector3.Distance(mEnemy.transform.position, mInitPos)/mSpeed)*(mEnemy.transform.forward*mEnemy.mSpeed) + mInitPos ;
-            //Debug.Log("Run!" + mInitPos + " " + mDestPos);
-    }
+        float lerpFactor = mFlyTimer / mTime;
 
-    public new void Fly()
-    {
-        float lerpFactor = mDeltaTime / mTime;
+        Vector3 pos = Vector3.Lerp(mInitPos, mDestPos, lerpFactor);
+        
+        transform.position = new Vector3(pos.x, mAnimationCurve.Evaluate(lerpFactor) * 4, pos.z);
 
-        Vector3 pos = Vector3.Lerp(mInitPos, mEnemy.transform.position, lerpFactor);
-        transform.position = pos;
-        transform.position = new Vector3(transform.position.x, mAnimationCurve.Evaluate(lerpFactor) * 4, transform.position.z);
-
-        mDeltaTime += Time.deltaTime;
+        mFlyTimer += Time.deltaTime;
     }
 
     void Update()
     {
 
-        if (mDeltaTime < mTime)
+        if (mFlyTimer < mTime)
         {
             Fly();
         }
