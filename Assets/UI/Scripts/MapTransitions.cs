@@ -17,7 +17,7 @@ public class MapTransitions : MonoBehaviour
     [SerializeField] Vector3 neutralCameraRotation = new Vector3(60f,10f,0f);//the position the camera snaps to in 3d mode
     
     [Header("2d map settings")]
-    [SerializeField] SpriteRenderer spriteMapRenderer;
+    [SerializeField] SpriteRenderer spriteMapRenderer;//keeping a direct reference to the material might be better
     [SerializeField] private float transitionDuration = 2.5f;
     [SerializeField] private float cameraSnappingDuration = 0.5f;
     
@@ -28,7 +28,7 @@ public class MapTransitions : MonoBehaviour
     {
         GameManager.OnEnterWallMode += ChangeGraphicsTo2D;
         GameManager.OnExitWallMode += ChangeGraphicsTo3D;
-        foreach (var keyword in spriteMapRenderer.material.shader.keywordSpace.keywords)
+        foreach (var keyword in spriteMapRenderer.sharedMaterial.shader.keywordSpace.keywords)
         {
             if (keyword.name == "_TRANSITIONINOUT_ON")
             {
@@ -36,8 +36,8 @@ public class MapTransitions : MonoBehaviour
                 break;
             }
         }
-        spriteMapRenderer.material.SetKeyword(_transitionInOutKeyWord,startsIn2dMode);
-        spriteMapRenderer.material.SetFloat(_transitionValueId,1.0f);
+        spriteMapRenderer.sharedMaterial.SetKeyword(_transitionInOutKeyWord,startsIn2dMode);
+        spriteMapRenderer.sharedMaterial.SetFloat(_transitionValueId,1.0f);
     }
 
     private void OnDestroy()
@@ -61,7 +61,7 @@ public class MapTransitions : MonoBehaviour
     private IEnumerator ChangeGraphicsTo3DRoutine()
     {
         var camTransform = cam.transform;
-        var mat = spriteMapRenderer.material;
+        var mat = spriteMapRenderer.sharedMaterial;
         var timer = 0f;
         mat.SetKeyword(_transitionInOutKeyWord,false);
         while (timer < transitionDuration)
@@ -91,7 +91,7 @@ public class MapTransitions : MonoBehaviour
     private IEnumerator ChangeGraphicsTo2DRoutine()
     {
         var camTransform = cam.transform;
-        var mat = spriteMapRenderer.material;
+        var mat = spriteMapRenderer.sharedMaterial;
         var timer = 0f;while (timer < cameraSnappingDuration)
         {
             timer += Time.deltaTime;
