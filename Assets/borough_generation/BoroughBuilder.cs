@@ -1,15 +1,11 @@
-using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace borough_generation
 {
     public class BoroughBuilder : MonoBehaviour
     {
-        [SerializeReference] private Terrain terrainRef;
         [SerializeField] private List<BoroughBehavior> boroughPrefabs;
         
         [SerializeField] private float maxTerrainHeight = 10.0f;

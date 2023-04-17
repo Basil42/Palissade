@@ -910,7 +910,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileSelectionHighlighterTransform: {fileID: 565586371}
   towerNumber: 2
-  towerPrefab: {fileID: 5976555379931497856, guid: 5d5b8dc21f287594bbb55e1cdcb13c5d,
+  towerPrefab: {fileID: 1750540033026532147, guid: 2e028ce2543636f44b2e7dda1eabd0e0,
     type: 3}
 --- !u!114 &1044060275
 MonoBehaviour:

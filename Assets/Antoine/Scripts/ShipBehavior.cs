@@ -1,20 +1,19 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ShipBehavior : MonoBehaviour
 {
-    public ProjectileBasic projectilePrefab;
+    [SerializeField] ProjectileBasic projectilePrefab;
 
     public bool isDestroyed = false;
 
     public Vector3 destination;
 
-    private GameObject target;
+    private GameObject _target;
 
     public float speed = 1f;
 
-    public float life = 5;
+    public float life = 5f;
 
     public float speedAttack = 1f;
     private float _timerAttack;
@@ -23,11 +22,11 @@ public class ShipBehavior : MonoBehaviour
     {
         GameManager.OnEnterAttackMode += () =>
         {
-            this.enabled = true;
+            enabled = true;
         };
         GameManager.OnExitAttackMode += () =>
         {
-            this.enabled = false;
+            enabled = false;
         };
     }
 
