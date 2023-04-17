@@ -5,45 +5,49 @@ using UnityEngine;
 
 public class TowerManual : TowerBasic
 {
-    private new Camera camera;
-    private Vector3 mMousePosition;
+    #region Obsolete
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        camera = Camera.main;
-    }
+    // private new Camera camera;
+    // private Vector3 mMousePosition;
+    //
+    // // Start is called before the first frame update
+    // void Start()
+    // {
+    //     camera = Camera.main;
+    // }
+    //
+    // void Shoot()
+    // {
+    //     if(GameManager.Instance.ActualGameMode == GameMode.AttackMode)
+    //     {
+    //             //Debug.Log("CastleShoot");
+    //         Vector3 m = transform.position;
+    //         //m += Vector3.up * 2.0f;
+    //         ProjectileBasic ball = (ProjectileBasic)Instantiate(mProjectile, m, transform.rotation);
+    //         ball.mDestPos = mMousePosition;
+    //     }
+    // }
+    //
+    // void Update()
+    // {
+    //     if (Input.GetMouseButtonDown(0))
+    //     {
+    //             //Debug.Log("Left Click");
+    //         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+    //         RaycastHit hit;
+    //
+    //         if (Physics.Raycast(ray, out hit))
+    //         {
+    //                 //Debug.Log($"{hit.collider.name} Detected", hit.collider.gameObject);
+    //            
+    //             mMousePosition = hit.point;
+    //             
+    //             Shoot();
+    //         }
+    //
+    //         //RandomColor();
+    //     }
+    // }
 
-    void Shoot()
-    {
-        if(GameManager.Instance.ActualGameMode == GameMode.AttackMode)
-        {
-                //Debug.Log("CastleShoot");
-            Vector3 m = transform.position;
-            //m += Vector3.up * 2.0f;
-            ProjectileBasic ball = (ProjectileBasic)Instantiate(mProjectile, m, transform.rotation);
-            ball.mDestPos = mMousePosition;
-        }
-    }
-
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-                //Debug.Log("Left Click");
-            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
-            {
-                    //Debug.Log($"{hit.collider.name} Detected", hit.collider.gameObject);
-               
-                mMousePosition = hit.point;
-                
-                Shoot();
-            }
-
-            //RandomColor();
-        }
-    }
+    #endregion
 }
