@@ -1,9 +1,49 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class ShipBehavior : MonoBehaviour
+public class ShipBehavior : MonoBehaviour, ITargetable
 {
-    
+    public static event Action<ShipBehavior> OnShipSpawn;
+    public static event Action<ShipBehavior> OnShipDestroyed;
+
+    private Transform _transform;
+    private void Awake()
+    {
+        OnShipSpawn?.Invoke(this);
+        _transform = transform;
+        //get destination here
+    }
+
+    private void OnDestroy()
+    {
+        OnShipDestroyed?.Invoke(this);
+    }
+    [SerializeField] private float speed = 1.0f;
+    private Vector3 Destination;
+    public Vector3 getPosition()
+    {
+        return transform.position;
+    }
+
+    public float getSpeed()
+    {
+        return speed;
+    }
+
+    public Vector3 getDestination()
+    {
+        return Destination;
+    }
+
+    public void getTargetingInfo(out Vector3 position, out float speed, out Vector3 destination)
+    {
+        position = getPosition();
+        speed = this.speed;
+        destination = Destination;
+    }
+
     #region Obsolete
 
     // [SerializeField] ProjectileBasic projectilePrefab;
@@ -96,4 +136,6 @@ public class ShipBehavior : MonoBehaviour
     // }
 
     #endregion
+
+    
 }

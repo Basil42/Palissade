@@ -3,8 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class ProjectileBasic : MonoBehaviour
+public abstract class ProjectileBasic : MonoBehaviour, IProjectile
 {
+    protected Vector3 Destination;
+    
+    public void SetDestination(Vector3 destination)
+    {
+        Destination = destination;
+    }
     #region Obsolete
 
     // [Min(1)] public int damage = 2;
@@ -57,4 +63,11 @@ public class ProjectileBasic : MonoBehaviour
     // }
 
     #endregion
+
+    
+}
+
+public interface IProjectile
+{
+    public void SetDestination(Vector3 destination);
 }

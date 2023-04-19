@@ -1,6 +1,7 @@
 using UnityEngine;
-public class ProjectileBehaviour : ProjectileBasic
+public class TowerArtilleryProjectile : ProjectileBasic
 {
+    
     #region Obsolete
 
 //     protected override void Fly()
